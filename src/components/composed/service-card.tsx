@@ -1,0 +1,90 @@
+"use client";
+
+import { type VariantProps, cva } from "class-variance-authority";
+import { cn } from "@/utils/cn";
+import { Button } from "@/components/ui/button";
+
+const serviceCardVariants = cva(
+  "group relative flex flex-col rounded-lg border p-8 transition-all duration-300",
+  {
+    variants: {
+      emphasis: {
+        default: "border-border bg-card hover:border-muted-foreground/50",
+        featured: "border-foreground bg-foreground text-background",
+      },
+    },
+    defaultVariants: {
+      emphasis: "default",
+    },
+  },
+);
+
+interface ServiceCardProps extends VariantProps<typeof serviceCardVariants> {
+  title: string;
+  price: number;
+  description: string;
+  delivery?: string;
+  onCheckout?: () => void;
+  className?: string;
+}
+
+export function ServiceCard({
+  title,
+  price,
+  description,
+  delivery,
+  emphasis,
+  onCheckout,
+  className,
+}: ServiceCardProps) {
+  const isFeatured = emphasis === "featured";
+
+  return (
+    <div className={cn(serviceCardVariants({ emphasis }), className)}>
+      <div className="mb-6">
+        <h3 className="text-xl font-medium tracking-tight">{title}</h3>
+        {delivery ? (
+          <span
+            className={cn(
+              "mt-2 inline-block text-xs uppercase tracking-wider",
+              isFeatured ? "text-background/60" : "text-muted-foreground",
+            )}
+          >
+            {delivery}
+          </span>
+        ) : null}
+      </div>
+
+      <p
+        className={cn(
+          "mb-8 text-sm",
+          isFeatured ? "text-background/70" : "text-muted-foreground",
+        )}
+      >
+        {description}
+      </p>
+
+      <div className="mt-auto">
+        <div className="mb-6">
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-medium">
+              ${price.toLocaleString()}
+            </span>
+          </div>
+        </div>
+
+        <Button
+          onClick={onCheckout}
+          className={cn(
+            "w-full transition-all duration-300",
+            isFeatured
+              ? "bg-background text-foreground hover:bg-background/90"
+              : "bg-foreground text-background hover:bg-foreground/90",
+          )}
+        >
+          Purchase
+        </Button>
+      </div>
+    </div>
+  );
+}
