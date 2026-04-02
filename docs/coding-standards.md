@@ -77,7 +77,7 @@ Apply these to every file written or modified:
 
 ## Git
 
-- **Commits**: Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`)
+- **Commits**: Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`, `docs/skills:`, `test:`)
 - **Merge strategy**: squash merge to main
 - **Branch naming**: `feature/`, `bugfix/`, `hotfix/`, `chore/` prefixes
 
