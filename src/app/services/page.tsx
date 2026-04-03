@@ -1,59 +1,24 @@
 import { PackageCard } from "@/components/composed/package-card";
 import { ServiceCard } from "@/components/composed/service-card";
+import { getServices } from "@/features/services/actions/get-services";
 
-const weeklyPackages = [
-  {
-    id: "6-hours",
-    hours: 6,
-    price: 250,
-    description: "Perfect for small projects",
-  },
-  {
-    id: "8-hours",
-    hours: 8,
-    price: 320,
-    description: "Ideal for growing needs",
-  },
-  {
-    id: "12-hours",
-    hours: 12,
-    price: 840,
-    description: "Best for ongoing work",
-  },
-  {
-    id: "16-hours",
-    hours: 16,
-    price: 1080,
-    description: "Maximum productivity",
-  },
-];
+export default async function ServicesPage() {
+  const result = await getServices();
 
-const oneTimeServices = [
-  {
-    id: "consultation",
-    title: "1-Hour Consultation",
-    price: 75,
-    description:
-      "Expert guidance on your project, strategy, or design challenges.",
-  },
-  {
-    id: "6-hour-package",
-    title: "6-Hour Package",
-    price: 500,
-    description: "Focused work session for quick turnaround projects.",
-  },
-  {
-    id: "full-application",
-    title: "Full Application Build",
-    price: 5000,
-    description:
-      "Canva Application with Admin Dashboard and Stripe integration. Complete solution delivered turnkey.",
-    delivery: "1 Month Delivery",
-    featured: true,
-  },
-];
+  if (!result.ok) {
+    return (
+      <main className="min-h-screen px-6 py-24 md:px-12 lg:px-24">
+        <div className="mx-auto max-w-6xl text-center">
+          <p className="text-muted-foreground">
+            Unable to load services. Please try again later.
+          </p>
+        </div>
+      </main>
+    );
+  }
 
-export default function ServicesPage() {
+  const { weeklyPackages, oneTimeServices } = result.value;
+
   return (
     <main className="min-h-screen px-6 py-24 md:px-12 lg:px-24">
       <div className="mx-auto max-w-6xl">
@@ -71,9 +36,15 @@ export default function ServicesPage() {
             </p>
           </header>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {weeklyPackages.map((pkg) => (
-              <PackageCard key={pkg.id} hours={pkg.hours} price={pkg.price} description={pkg.description} />
+              <PackageCard
+                key={pkg.priceId}
+                hours={pkg.hours}
+                price={pkg.price}
+                description={pkg.description}
+                emphasis={pkg.featured ? "popular" : "default"}
+              />
             ))}
           </div>
         </section>
@@ -95,7 +66,7 @@ export default function ServicesPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {oneTimeServices.map((service) => (
               <ServiceCard
-                key={service.id}
+                key={service.productId}
                 title={service.title}
                 price={service.price}
                 description={service.description}
