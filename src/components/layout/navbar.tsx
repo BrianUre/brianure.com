@@ -5,13 +5,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
-
-const navLinks = [
-  { href: "/trajectory", label: "Trajectory" },
-  { href: "/portfolio", label: "Portfolio" },
-  { href: "/services", label: "Services" },
-  { href: "/contact", label: "Contact" },
-];
+import { MobileNav } from "@/components/layout/mobile-nav";
+import { navLinks } from "@/config/navigation";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -36,7 +31,7 @@ export function Navbar() {
           />
         </Link>
 
-        <div className="flex items-center gap-8">
+        <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -52,6 +47,10 @@ export function Navbar() {
             </Link>
           ))}
           <ThemeToggle />
+        </div>
+
+        <div className="md:hidden">
+          <MobileNav />
         </div>
       </div>
     </nav>

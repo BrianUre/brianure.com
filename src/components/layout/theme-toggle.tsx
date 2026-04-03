@@ -9,13 +9,13 @@ export function ThemeToggle() {
 
   return (
     <div className="flex items-center gap-2">
-      <Sun className="hidden size-4 text-muted-foreground dark:block" />
-      <Moon className="block size-4 text-muted-foreground dark:hidden" />
       <Switch
         checked={resolvedTheme === "dark"}
         onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
         aria-label="Toggle dark mode"
       />
+      <Sun className="hidden size-4 text-muted-foreground dark:block" />
+      <Moon className="block size-4 text-muted-foreground dark:hidden" />
     </div>
   );
 }
