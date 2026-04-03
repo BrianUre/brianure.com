@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/utils/cn"
 
 export default function ContactPage() {
   return (
@@ -92,17 +93,17 @@ function CalendarUI() {
   return (
     <div className="mx-auto max-w-md">
       <div className="mb-6 flex items-center justify-between">
-        <button className="rounded p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+        <Button size="icon" variant="ghost" aria-label="Previous month">
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-        </button>
+        </Button>
         <span className="text-sm font-medium text-foreground">{currentMonth}</span>
-        <button className="rounded p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+        <Button size="icon" variant="ghost" aria-label="Next month">
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
-        </button>
+        </Button>
       </div>
 
       <div className="mb-2 grid grid-cols-7 gap-1">
@@ -120,15 +121,14 @@ function CalendarUI() {
             <button
               key={i}
               disabled={date.muted || !isAvailable}
-              className={`
-                aspect-square rounded-md p-2 text-sm transition-colors
-                ${date.muted
+              className={cn(
+                "aspect-square rounded-md p-2 text-sm transition-colors",
+                date.muted
                   ? "text-muted-foreground/30"
                   : isAvailable
                     ? "text-foreground hover:bg-foreground hover:text-background"
-                    : "text-muted-foreground/50"
-                }
-              `}
+                    : "text-muted-foreground/50",
+              )}
             >
               {date.day}
             </button>

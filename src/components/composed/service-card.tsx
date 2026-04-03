@@ -74,13 +74,9 @@ export function ServiceCard({
         </div>
 
         <Button
+          variant={isFeatured ? "solid-inverse" : "solid"}
+          className="w-full"
           onClick={onCheckout}
-          className={cn(
-            "w-full transition-all duration-300",
-            isFeatured
-              ? "bg-background text-foreground hover:bg-background/90"
-              : "bg-foreground text-background hover:bg-foreground/90",
-          )}
         >
           Purchase
         </Button>

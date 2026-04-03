@@ -86,13 +86,9 @@ export function PackageCard({
         </div>
 
         <Button
+          variant={isPopular ? "solid-inverse" : "solid"}
+          className="w-full"
           onClick={onCheckout}
-          className={cn(
-            "w-full transition-all duration-300",
-            isPopular
-              ? "bg-background text-foreground hover:bg-background/90"
-              : "bg-foreground text-background hover:bg-foreground/90",
-          )}
         >
           Get started
         </Button>
