@@ -22,6 +22,12 @@ yarn-error.log*
 .env
 .env*.local
 
+# google service account credentials
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+
 # vercel
 .vercel
 
