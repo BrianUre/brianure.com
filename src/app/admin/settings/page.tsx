@@ -1,54 +1,17 @@
-"use client"
+import { getAvailability } from "@/features/availability/actions/get-availability"
+import { AvailabilityForm } from "./_components/availability-form"
 
-import { useState } from "react"
+export default async function AdminSettingsPage() {
+  const result = await getAvailability()
 
-import { Button } from "@/components/ui/button"
-import { DayRow, type DaySchedule } from "./_components/day-row"
-
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-]
-
-function generateTimeSlots(): string[] {
-  const slots: string[] = []
-  for (let hour = 0; hour < 24; hour++) {
-    for (let minute = 0; minute < 60; minute += 30) {
-      const h = hour % 12 || 12
-      const m = minute.toString().padStart(2, "0")
-      const period = hour < 12 ? "AM" : "PM"
-      slots.push(`${h}:${m} ${period}`)
-    }
-  }
-  return slots
-}
-
-const TIME_SLOTS = generateTimeSlots()
-
-type Schedule = Record<string, DaySchedule>
-
-const DEFAULT_SCHEDULE: Schedule = DAYS.reduce((acc, day) => {
-  acc[day] = {
-    enabled: day !== "Saturday" && day !== "Sunday",
-    from: "11:00 AM",
-    to: "5:00 PM",
-  }
-  return acc
-}, {} as Schedule)
-
-export default function AdminSettingsPage() {
-  const [schedule, setSchedule] = useState<Schedule>(DEFAULT_SCHEDULE)
-
-  const updateDay = (day: string, updates: Partial<DaySchedule>) => {
-    setSchedule((prev) => ({
-      ...prev,
-      [day]: { ...prev[day], ...updates },
-    }))
+  if (!result.ok) {
+    return (
+      <main className="min-h-screen bg-background pb-16 pt-24">
+        <div className="mx-auto max-w-3xl px-6">
+          <p className="text-muted-foreground">Unable to load availability settings.</p>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -62,22 +25,7 @@ export default function AdminSettingsPage() {
             Configure your available hours for booking
           </p>
         </header>
-
-        <div className="space-y-4">
-          {DAYS.map((day) => (
-            <DayRow
-              key={day}
-              day={day}
-              schedule={schedule[day]}
-              timeSlots={TIME_SLOTS}
-              onUpdate={(updates) => updateDay(day, updates)}
-            />
-          ))}
-        </div>
-
-        <div className="mt-8 flex justify-end">
-          <Button variant="solid">Save Changes</Button>
-        </div>
+        <AvailabilityForm initialSchedule={result.value} />
       </div>
     </main>
   )
