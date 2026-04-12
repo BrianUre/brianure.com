@@ -3,6 +3,14 @@
 import { useState } from "react"
 import { cva } from "class-variance-authority"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { cn } from "@/utils/cn"
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -51,12 +59,20 @@ function getCalendarDates(year: number, month: number) {
   })
 }
 
-export function CalendarWithSlots() {
+interface ServiceOption {
+  value: string
+  label: string
+}
+
+export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceOption[] }) {
   const today = new Date()
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
   const [selectedDate, setSelectedDate] = useState<number | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [product, setProduct] = useState("")
 
   const dates = getCalendarDates(year, month)
   const monthLabel = new Date(year, month).toLocaleDateString("en-US", {
@@ -89,7 +105,7 @@ export function CalendarWithSlots() {
 
   return (
     <div className="rounded-lg border border-border bg-card p-8">
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-3">
         {/* Calendar */}
         <div>
           <div className="mb-6 flex items-center justify-between">
@@ -116,7 +132,8 @@ export function CalendarWithSlots() {
 
           <div className="grid grid-cols-7 gap-1">
             {dates.map((date, i) => {
-              const isAvailable = !date.muted && availableDays.includes(date.day)
+              const isPast = !date.muted && new Date(year, month, date.day) < new Date(today.getFullYear(), today.getMonth(), today.getDate())
+              const isAvailable = !date.muted && !isPast && availableDays.includes(date.day)
               const isSelected = !date.muted && selectedDate === date.day
               const state = date.muted
                 ? "muted"
@@ -193,17 +210,73 @@ export function CalendarWithSlots() {
               </div>
             )}
           </div>
+        </div>
 
-          {selectedDate && selectedTime && (
-            <div className="mt-6">
-              <Button variant="solid" className="w-full">
-                Confirm Booking
-              </Button>
+        {/* Booking Form */}
+        <div className="flex flex-col">
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-foreground">Your Details</h3>
+            <p className="mt-1 text-xs text-muted-foreground">Fill in your information to book</p>
+          </div>
+
+          <div className="flex flex-1 flex-col gap-4">
+            <div>
+              <label htmlFor="booking-name" className="mb-2 block text-xs font-medium text-muted-foreground">
+                Name
+              </label>
+              <Input
+                id="booking-name"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="booking-email" className="mb-2 block text-xs font-medium text-muted-foreground">
+                Email
+              </label>
+              <Input
+                id="booking-email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="booking-product" className="mb-2 block text-xs font-medium text-muted-foreground">
+                Product of Interest
+              </label>
+              <Select value={product} onValueChange={setProduct}>
+                <SelectTrigger id="booking-product">
+                  <SelectValue placeholder="Select a product" />
+                </SelectTrigger>
+                <SelectContent>
+                  {serviceOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <Button
+              className="w-full"
+              disabled={!selectedDate || !selectedTime || !name || !email || !product}
+            >
+              Confirm Booking
+            </Button>
+            {selectedDate && selectedTime && (
               <p className="mt-2 text-center text-xs text-muted-foreground">
                 {monthName} {selectedDate}, {year} at {selectedTime}
               </p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

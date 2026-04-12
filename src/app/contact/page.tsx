@@ -1,8 +1,23 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { getServices } from "@/features/services/actions/get-services"
 import { CalendarWithSlots } from "./calendar-with-slots"
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const servicesResult = await getServices()
+  const serviceOptions = servicesResult.ok
+    ? [
+        ...servicesResult.value.weeklyPackages.map((p) => ({
+          value: p.priceId,
+          label: `Weekly ${p.hours} Hours`,
+        })),
+        ...servicesResult.value.oneTimeServices.map((s) => ({
+          value: s.priceId,
+          label: s.title,
+        })),
+        { value: "other", label: "Other" },
+      ]
+    : [{ value: "other", label: "Other" }]
   return (
     <main className="min-h-screen bg-background px-6 pb-24 pt-32">
       <div className="mx-auto max-w-3xl">
@@ -44,7 +59,7 @@ export default function ContactPage() {
               Schedule a Meeting
             </h2>
           </div>
-          <CalendarWithSlots />
+          <CalendarWithSlots serviceOptions={serviceOptions} />
         </section>
       </div>
     </main>
