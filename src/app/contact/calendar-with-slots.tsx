@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/utils/cn"
+import { createBooking } from "@/features/booking/actions/create-booking"
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
@@ -73,6 +74,21 @@ export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceO
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [product, setProduct] = useState("")
+
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [errorMessage, setErrorMessage] = useState("")
+
+  async function handleSubmit() {
+    if (!selectedDate || !selectedTime) return
+    setStatus("loading")
+    const result = await createBooking({ name, email, product, year, month, day: selectedDate, time: selectedTime })
+    if (result.ok) {
+      setStatus("success")
+    } else {
+      setStatus("error")
+      setErrorMessage(result.error.message)
+    }
+  }
 
   const dates = getCalendarDates(year, month)
   const monthLabel = new Date(year, month).toLocaleDateString("en-US", {
@@ -265,16 +281,32 @@ export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceO
           </div>
 
           <div className="mt-6">
-            <Button
-              className="w-full"
-              disabled={!selectedDate || !selectedTime || !name || !email || !product}
-            >
-              Confirm Booking
-            </Button>
-            {selectedDate && selectedTime && (
-              <p className="mt-2 text-center text-xs text-muted-foreground">
-                {monthName} {selectedDate}, {year} at {selectedTime}
-              </p>
+            {status === "success" ? (
+              <div className="rounded-md border border-border bg-muted p-4 text-center">
+                <p className="text-sm font-medium text-foreground">Booking confirmed!</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {monthName} {selectedDate}, {year} at {selectedTime}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">Check your email for the calendar invite.</p>
+              </div>
+            ) : (
+              <>
+                <Button
+                  className="w-full"
+                  disabled={status === "loading" || !selectedDate || !selectedTime || !name || !email || !product}
+                  onClick={handleSubmit}
+                >
+                  {status === "loading" ? "Booking…" : "Confirm Booking"}
+                </Button>
+                {status === "error" && (
+                  <p className="mt-2 text-center text-xs text-destructive">{errorMessage}</p>
+                )}
+                {selectedDate && selectedTime && status !== "error" && (
+                  <p className="mt-2 text-center text-xs text-muted-foreground">
+                    {monthName} {selectedDate}, {year} at {selectedTime}
+                  </p>
+                )}
+              </>
             )}
           </div>
         </div>

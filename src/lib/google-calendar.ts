@@ -1,0 +1,17 @@
+import { google } from "googleapis"
+
+export const CALENDAR_TIMEZONE = "America/Chicago"
+export const CALENDAR_ID = "primary"
+
+export function getCalendar() {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+  )
+
+  oauth2Client.setCredentials({
+    refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+  })
+
+  return google.calendar({ version: "v3", auth: oauth2Client })
+}
