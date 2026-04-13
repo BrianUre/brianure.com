@@ -23,7 +23,8 @@ function EmailContactForm({ serviceOptions }: EmailContactFormProps) {
 
   async function handleSubmit() {
     setStatus("loading")
-    const result = await sendContactEmail({ name, email, product, message })
+    const productLabel = serviceOptions.find((option) => option.value === product)?.label ?? product
+    const result = await sendContactEmail({ name, email, productLabel, message })
     if (result.ok) {
       setStatus("success")
     } else {
@@ -61,7 +62,7 @@ function EmailContactForm({ serviceOptions }: EmailContactFormProps) {
             id="email-form-name"
             placeholder="Your name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(event) => setName(event.target.value)}
           />
         </div>
 
@@ -74,7 +75,7 @@ function EmailContactForm({ serviceOptions }: EmailContactFormProps) {
             type="email"
             placeholder="you@example.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
           />
         </div>
 
@@ -98,7 +99,7 @@ function EmailContactForm({ serviceOptions }: EmailContactFormProps) {
             id="email-form-message"
             placeholder="Tell me about your project..."
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(event) => setMessage(event.target.value)}
             className="min-h-32"
           />
         </div>

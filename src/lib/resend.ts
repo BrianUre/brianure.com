@@ -1,20 +1,24 @@
 import "server-only"
 
+import type React from "react"
 import { Resend } from "resend"
 import { z } from "zod"
 
 import { err, ok } from "@/types/result"
 import type { Result } from "@/types/result"
 
-const SendEmailSchema = z.object({
+const SendEmailBaseSchema = z.object({
   from: z.string().min(1),
   to: z.string().email(),
   subject: z.string().min(1),
-  html: z.string().min(1),
   replyTo: z.string().email().optional(),
 })
 
-type SendEmailOptions = z.infer<typeof SendEmailSchema>
+type SendEmailBase = z.infer<typeof SendEmailBaseSchema>
+
+type SendEmailOptions =
+  | (SendEmailBase & { react: React.ReactElement; html?: never })
+  | (SendEmailBase & { html: string; react?: never })
 
 type SendEmailErrorCode = "VALIDATION_FAILED" | "RESEND_SEND_FAILED"
 
@@ -26,7 +30,7 @@ type SendEmailError = {
 async function sendEmail(
   options: SendEmailOptions,
 ): Promise<Result<void, SendEmailError>> {
-  const parsed = SendEmailSchema.safeParse(options)
+  const parsed = SendEmailBaseSchema.safeParse(options)
 
   if (!parsed.success) {
     return err({
@@ -35,7 +39,10 @@ async function sendEmail(
     })
   }
 
-  const { from, to, subject, html, replyTo } = parsed.data
+  const { from, to, subject, replyTo } = parsed.data
+  const body = "react" in options && options.react
+    ? { react: options.react }
+    : { html: (options as { html: string }).html }
 
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
@@ -44,8 +51,8 @@ async function sendEmail(
       from,
       to,
       subject,
-      html,
       ...(replyTo ? { replyTo } : {}),
+      ...body,
     })
 
     if (error) {
