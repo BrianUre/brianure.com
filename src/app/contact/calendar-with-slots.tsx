@@ -4,13 +4,8 @@ import { useState } from "react"
 import { cva } from "class-variance-authority"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { ServiceSelect } from "@/components/composed/service-select"
+import type { ServiceOption } from "@/components/composed/service-select"
 import { cn } from "@/utils/cn"
 import { createBooking } from "@/features/booking/actions/create-booking"
 
@@ -58,11 +53,6 @@ function getCalendarDates(year: number, month: number) {
     }
     return { day, muted: false }
   })
-}
-
-interface ServiceOption {
-  value: string
-  label: string
 }
 
 export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceOption[] }) {
@@ -265,18 +255,12 @@ export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceO
               <label htmlFor="booking-product" className="mb-2 block text-xs font-medium text-muted-foreground">
                 Product of Interest
               </label>
-              <Select value={product} onValueChange={setProduct}>
-                <SelectTrigger id="booking-product">
-                  <SelectValue placeholder="Select a product" />
-                </SelectTrigger>
-                <SelectContent>
-                  {serviceOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <ServiceSelect
+                id="booking-product"
+                serviceOptions={serviceOptions}
+                value={product}
+                onValueChange={setProduct}
+              />
             </div>
           </div>
 
