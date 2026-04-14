@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Brian Ure | SaaS Development",
-  description: "Helping startups bring their businesses online.",
+  title: "Brian Ure | SaaS Consultant",
+  description: "Helping startups make revenue from their web idea.",
 };
 
 export default function RootLayout({
