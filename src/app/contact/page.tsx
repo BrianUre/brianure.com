@@ -10,10 +10,7 @@ export default async function ContactPage() {
           value: p.priceId,
           label: `Weekly ${p.hours} Hours`,
         })),
-        ...servicesResult.value.oneTimeServices.map((s) => ({
-          value: s.priceId,
-          label: s.title,
-        })),
+{ value: "project-planning", label: "Project planning" },
         { value: "other", label: "Other" },
       ]
     : [{ value: "other", label: "Other" }]

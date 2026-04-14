@@ -22,9 +22,10 @@ const serviceCardVariants = cva(
 
 interface ServiceCardProps extends VariantProps<typeof serviceCardVariants> {
   title: string;
-  price: number;
+  price?: number;
   description: string;
   delivery?: string;
+  actionLabel?: string;
   contactHref?: string;
   className?: string;
 }
@@ -34,6 +35,7 @@ export function ServiceCard({
   price,
   description,
   delivery,
+  actionLabel = "Purchase",
   emphasis,
   contactHref,
   className,
@@ -66,20 +68,22 @@ export function ServiceCard({
       </p>
 
       <div className="mt-auto">
-        <div className="mb-6">
-          <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-medium">
-              ${price.toLocaleString()}
-            </span>
+        {price !== undefined && (
+          <div className="mb-6">
+            <div className="flex items-baseline gap-1">
+              <span className="text-3xl font-medium">
+                ${price.toLocaleString()}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         <Button
           variant={isFeatured ? "solid-inverse" : "solid"}
           className="w-full"
           asChild={!!contactHref}
         >
-          {contactHref ? <Link href={contactHref}>Purchase</Link> : "Purchase"}
+          {contactHref ? <Link href={contactHref}>{actionLabel}</Link> : actionLabel}
         </Button>
       </div>
     </div>

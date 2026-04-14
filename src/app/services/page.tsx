@@ -17,7 +17,7 @@ export default async function ServicesPage() {
     );
   }
 
-  const { weeklyPackages, oneTimeServices } = result.value;
+  const { weeklyPackages } = result.value;
 
   return (
     <main className="min-h-screen px-6 py-24 md:px-12 lg:px-24">
@@ -49,32 +49,27 @@ export default async function ServicesPage() {
           </div>
         </section>
 
-        <section className="hidden">
+        <section className="mb-32">
           <header className="mb-16 text-center">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
-              One-Time Services
+              Milestone based
             </p>
             <h2 className="text-balance text-4xl font-light tracking-tight md:text-5xl">
-              Project-Based Work
+              Project Planning.
             </h2>
             <p className="mx-auto mt-6 max-w-md text-pretty text-muted-foreground">
-              Single purchases for consultations, focused sessions, or complete
-              project builds.
+              For clients who value budget predictability and defined goals.
             </p>
           </header>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {oneTimeServices.map((service) => (
-              <ServiceCard
-                key={service.productId}
-                title={service.title}
-                price={service.price}
-                description={service.description}
-                delivery={service.delivery}
-                emphasis={service.featured ? "featured" : "default"}
-                contactHref={`/contact?service=${service.priceId}`}
-              />
-            ))}
+          <div className="grid gap-6 lg:grid-cols-3">
+            <ServiceCard
+              title="Application Development Plan"
+              description="I will analyze your project after a briefing call and plan its development, delivering a clear set of milestones with deadlines and prices."
+              actionLabel="Get a quote"
+              contactHref="/contact?service=project-planning"
+              className="lg:col-span-3"
+            />
           </div>
         </section>
 
