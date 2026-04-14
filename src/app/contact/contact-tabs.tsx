@@ -75,7 +75,7 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
             <Image src="/images/google-meet.png" alt="Google Meet" width={20} height={20} className="size-5" />
           </div>
           <h3 className="mb-1 text-sm font-medium">Book a Meeting</h3>
-          <p className={cn(methodDescVariants({ state: meetingState }))}>Schedule a call</p>
+          <p className={cn(methodDescVariants({ state: meetingState }))}>Let's talk about your project and get started</p>
         </button>
 
         <button
@@ -88,7 +88,7 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
             <Image src="/images/gmail.png" alt="Gmail" width={18} height={18} className="size-5 " />
           </div>
           <h3 className="mb-1 text-sm font-medium">Email</h3>
-          <p className={cn(methodDescVariants({ state: emailState }))}>Send a message</p>
+          <p className={cn(methodDescVariants({ state: emailState }))}>Ask me any questions</p>
         </button>
 
         <a
@@ -101,7 +101,7 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
             <Image src="/images/slack.png" alt="Slack" width={20} height={20} className="size-5" />
           </div>
           <h3 className="mb-1 text-sm font-medium">Slack</h3>
-          <p className={cn(methodDescVariants({ state: "inactive" }))}>Message on Slack</p>
+          <p className={cn(methodDescVariants({ state: "inactive" }))}>Join my Slack server and start a chat</p>
         </a>
       </div>
 
