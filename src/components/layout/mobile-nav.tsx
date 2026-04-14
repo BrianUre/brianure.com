@@ -31,22 +31,6 @@ export function MobileNav() {
       <SheetContent side="right" className="w-64">
         <SheetHeader className="flex justify-center border-b border-border gap-4">
           <SheetTitle className="sr-only">Navigation</SheetTitle>
-          <Link href="/" onClick={() => setOpen(false)}>
-            <Image
-              src="/images/logo-dark.png"
-              alt="Brian Ure"
-              width={32}
-              height={32}
-              className="hidden dark:block"
-            />
-            <Image
-              src="/images/logo-light.png"
-              alt="Brian Ure"
-              width={32}
-              height={32}
-              className="block dark:hidden"
-            />
-          </Link>
           <ThemeToggle />
         </SheetHeader>
         <nav className="flex flex-col gap-1 px-2">
