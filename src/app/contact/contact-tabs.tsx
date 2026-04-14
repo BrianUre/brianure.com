@@ -34,7 +34,7 @@ const methodIconVariants = cva(
   {
     variants: {
       state: {
-        active: "border-background/30",
+        active: "border-background/30 !bg-white/90 dark:bg-transparent",
         inactive: "border-border",
       },
     },
