@@ -77,7 +77,7 @@
 }
 
 .b-dev {
-  @apply border-2 border-dashed border-blue-400;
+  @apply border border-dashed border-blue-400;
 }
 
 @layer base {

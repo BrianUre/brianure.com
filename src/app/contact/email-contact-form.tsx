@@ -46,7 +46,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
   }
 
   return (
-    <div className="mx-auto max-w-lg rounded-lg border border-border bg-card p-8">
+    <div className="mx-auto max-w-lg rounded-lg border border-border bg-card p-3 sm:p-8">
       <div className="mb-6 text-center">
         <h2 className="text-lg font-medium text-foreground">Send a Message</h2>
         <p className="mt-1 text-sm text-muted-foreground">

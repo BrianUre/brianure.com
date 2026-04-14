@@ -16,7 +16,7 @@ export default async function ContactPage() {
     : [{ value: "other", label: "Other" }]
 
   return (
-    <main className="min-h-screen bg-background px-6 pb-24 pt-32">
+    <main className="min-h-screen bg-background px-2 sm:px-6 pb-24 pt-32">
       <div className="mx-auto max-w-4xl">
         <header className="mb-16 text-center">
           <h1 className="text-balance text-4xl font-light tracking-tight text-foreground md:text-5xl">

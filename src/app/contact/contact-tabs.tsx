@@ -17,7 +17,7 @@ interface ContactTabsProps {
 }
 
 const methodCardVariants = cva(
-  "flex flex-col items-center rounded-lg border p-6 text-center motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+  "flex flex-col items-center rounded-lg border p-3 text-center motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 sm:p-6",
   {
     variants: {
       state: {
@@ -30,7 +30,7 @@ const methodCardVariants = cva(
 )
 
 const methodIconVariants = cva(
-  "mb-3 flex h-10 w-10 items-center justify-center rounded-full border",
+  "sm:mb-3 flex h-10 w-10 items-center justify-center rounded-full border",
   {
     variants: {
       state: {
@@ -64,7 +64,7 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
 
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <button
           type="button"
           onClick={() => setActiveMethod("meeting")}
@@ -74,8 +74,8 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
           <div className={cn(methodIconVariants({ state: meetingState }))}>
             <Image src="/images/google-meet.png" alt="Google Meet" width={20} height={20} className="size-5" />
           </div>
-          <h3 className="mb-1 text-sm font-medium">Book a Meeting</h3>
-          <p className={cn(methodDescVariants({ state: meetingState }))}>Let's talk about your project and get started</p>
+          <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">Book a Meeting</h3>
+          <p className={cn(methodDescVariants({ state: meetingState }), "hidden sm:block")}>Let&apos;s talk about your project and get started</p>
         </button>
 
         <button
@@ -87,8 +87,8 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
           <div className={cn(methodIconVariants({ state: emailState }))}>
             <Image src="/images/gmail.png" alt="Gmail" width={18} height={18} className="size-5 " />
           </div>
-          <h3 className="mb-1 text-sm font-medium">Email</h3>
-          <p className={cn(methodDescVariants({ state: emailState }))}>Ask me any questions</p>
+          <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">Email</h3>
+          <p className={cn(methodDescVariants({ state: emailState }), "hidden sm:block")}>Ask me any questions</p>
         </button>
 
         <a
@@ -100,8 +100,8 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
           <div className={cn(methodIconVariants({ state: "inactive" }))}>
             <Image src="/images/slack.png" alt="Slack" width={20} height={20} className="size-5" />
           </div>
-          <h3 className="mb-1 text-sm font-medium">Slack</h3>
-          <p className={cn(methodDescVariants({ state: "inactive" }))}>Join my Slack server and start a chat</p>
+          <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">Slack</h3>
+          <p className={cn(methodDescVariants({ state: "inactive" }), "hidden sm:block")}>Join my Slack server and start a chat</p>
         </a>
       </div>
 

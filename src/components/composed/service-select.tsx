@@ -23,7 +23,7 @@ interface ServiceSelectProps {
 function ServiceSelect({ serviceOptions, value, onValueChange, id, className }: ServiceSelectProps) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger id={id} className={cn(className)}>
+      <SelectTrigger id={id} className={cn('w-full', className)}>
         <SelectValue placeholder="Select a product" />
       </SelectTrigger>
       <SelectContent>

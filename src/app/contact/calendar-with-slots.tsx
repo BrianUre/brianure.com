@@ -24,7 +24,7 @@ const timeSlots = [
 ]
 
 const calendarDayVariants = cva(
-  "aspect-square rounded-md p-2 text-sm motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+  "aspect-square rounded-md sm:p-2 text-sm motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
   {
     variants: {
       state: {
@@ -115,7 +115,7 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
   }
 
   return (
-    <div className="rounded-lg border border-border bg-card p-8">
+    <div className="rounded-lg border border-border bg-card p-3 sm:p-8">
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Calendar */}
         <div>
