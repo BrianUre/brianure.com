@@ -85,7 +85,7 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
           className={cn(methodCardVariants({ state: emailState }))}
         >
           <div className={cn(methodIconVariants({ state: emailState }))}>
-            <Image src="/images/gmail.webp" alt="Gmail" width={20} height={20} className="size-5" />
+            <Image src="/images/gmail.png" alt="Gmail" width={18} height={18} className="size-5 " />
           </div>
           <h3 className="mb-1 text-sm font-medium">Email</h3>
           <p className={cn(methodDescVariants({ state: emailState }))}>Send a message</p>
