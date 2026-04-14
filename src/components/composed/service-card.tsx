@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ interface ServiceCardProps extends VariantProps<typeof serviceCardVariants> {
   price: number;
   description: string;
   delivery?: string;
-  onCheckout?: () => void;
+  contactHref?: string;
   className?: string;
 }
 
@@ -34,7 +35,7 @@ export function ServiceCard({
   description,
   delivery,
   emphasis,
-  onCheckout,
+  contactHref,
   className,
 }: ServiceCardProps) {
   const isFeatured = emphasis === "featured";
@@ -76,9 +77,9 @@ export function ServiceCard({
         <Button
           variant={isFeatured ? "solid-inverse" : "solid"}
           className="w-full"
-          onClick={onCheckout}
+          asChild={!!contactHref}
         >
-          Purchase
+          {contactHref ? <Link href={contactHref}>Purchase</Link> : "Purchase"}
         </Button>
       </div>
     </div>

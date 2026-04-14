@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { getServices } from "@/features/services/actions/get-services"
 import { ContactTabs } from "./contact-tabs"
 
@@ -27,7 +28,9 @@ export default async function ContactPage() {
           <p className="mt-4 text-muted-foreground">Choose how you&apos;d like to connect</p>
         </header>
 
-        <ContactTabs serviceOptions={serviceOptions} />
+        <Suspense>
+          <ContactTabs serviceOptions={serviceOptions} />
+        </Suspense>
       </div>
     </main>
   )

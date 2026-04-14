@@ -11,12 +11,13 @@ import { sendContactEmail } from "@/features/contact/actions/send-contact-email"
 
 interface EmailContactFormProps {
   serviceOptions: ServiceOption[]
+  product: string
+  onProductChange: (value: string) => void
 }
 
-function EmailContactForm({ serviceOptions }: EmailContactFormProps) {
+function EmailContactForm({ serviceOptions, product, onProductChange }: EmailContactFormProps) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [product, setProduct] = useState("")
   const [message, setMessage] = useState("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
@@ -87,7 +88,7 @@ function EmailContactForm({ serviceOptions }: EmailContactFormProps) {
             id="email-form-product"
             serviceOptions={serviceOptions}
             value={product}
-            onValueChange={setProduct}
+            onValueChange={onProductChange}
           />
         </div>
 

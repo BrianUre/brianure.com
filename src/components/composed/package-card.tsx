@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,7 @@ interface PackageCardProps extends VariantProps<typeof packageCardVariants> {
   hours: number;
   price: number;
   description: string;
-  onCheckout?: () => void;
+  contactHref?: string;
   className?: string;
 }
 
@@ -32,7 +33,7 @@ export function PackageCard({
   price,
   description,
   emphasis,
-  onCheckout,
+  contactHref,
   className,
 }: PackageCardProps) {
   const isPopular = emphasis === "popular";
@@ -88,9 +89,9 @@ export function PackageCard({
         <Button
           variant={isPopular ? "solid-inverse" : "solid"}
           className="w-full"
-          onClick={onCheckout}
+          asChild={!!contactHref}
         >
-          Get started
+          {contactHref ? <Link href={contactHref}>Get started</Link> : "Get started"}
         </Button>
       </div>
     </div>

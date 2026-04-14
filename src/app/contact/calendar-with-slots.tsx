@@ -55,7 +55,13 @@ function getCalendarDates(year: number, month: number) {
   })
 }
 
-export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceOption[] }) {
+interface CalendarWithSlotsProps {
+  serviceOptions: ServiceOption[]
+  product: string
+  onProductChange: (value: string) => void
+}
+
+export function CalendarWithSlots({ serviceOptions, product, onProductChange }: CalendarWithSlotsProps) {
   const today = new Date()
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
@@ -63,7 +69,6 @@ export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceO
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [product, setProduct] = useState("")
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
@@ -259,7 +264,7 @@ export function CalendarWithSlots({ serviceOptions }: { serviceOptions: ServiceO
                 id="booking-product"
                 serviceOptions={serviceOptions}
                 value={product}
-                onValueChange={setProduct}
+                onValueChange={onProductChange}
               />
             </div>
           </div>

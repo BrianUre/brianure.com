@@ -44,6 +44,7 @@ export default async function ServicesPage() {
                 price={pkg.price}
                 description={pkg.description}
                 emphasis={pkg.featured ? "popular" : "default"}
+                contactHref={`/contact?service=${pkg.priceId}`}
               />
             ))}
           </div>
@@ -72,6 +73,7 @@ export default async function ServicesPage() {
                 description={service.description}
                 delivery={service.delivery}
                 emphasis={service.featured ? "featured" : "default"}
+                contactHref={`/contact?service=${service.priceId}`}
               />
             ))}
           </div>

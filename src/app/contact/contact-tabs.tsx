@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -54,7 +55,9 @@ const methodDescVariants = cva("text-xs", {
 type MethodState = VariantProps<typeof methodCardVariants>["state"]
 
 function ContactTabs({ serviceOptions }: ContactTabsProps) {
+  const searchParams = useSearchParams()
   const [activeMethod, setActiveMethod] = useState<ContactMethod>("meeting")
+  const [product, setProduct] = useState(searchParams.get("service") ?? "")
 
   const meetingState: MethodState = activeMethod === "meeting" ? "active" : "inactive"
   const emailState: MethodState = activeMethod === "email" ? "active" : "inactive"
@@ -104,9 +107,9 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
 
       <section className="mt-12">
         {activeMethod === "meeting" ? (
-          <CalendarWithSlots serviceOptions={serviceOptions} />
+          <CalendarWithSlots serviceOptions={serviceOptions} product={product} onProductChange={setProduct} />
         ) : (
-          <EmailContactForm serviceOptions={serviceOptions} />
+          <EmailContactForm serviceOptions={serviceOptions} product={product} onProductChange={setProduct} />
         )}
       </section>
     </>
