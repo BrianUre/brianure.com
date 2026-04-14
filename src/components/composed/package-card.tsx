@@ -54,25 +54,8 @@ export function PackageCard({
         </div>
       </div>
 
-      <p
-        className={cn(
-          "mb-8 text-sm",
-          isPopular ? "text-background/70" : "text-muted-foreground",
-        )}
-      >
-        {description}
-      </p>
-
       <div className="mt-auto">
         <div className="mb-6">
-          <span
-            className={cn(
-              "text-sm",
-              isPopular ? "text-background/60" : "text-muted-foreground",
-            )}
-          >
-            Starting at
-          </span>
           <div className="flex items-baseline gap-1">
             <span className="text-2xl font-medium">${price}</span>
             <span

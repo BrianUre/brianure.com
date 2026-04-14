@@ -31,8 +31,7 @@ export default async function ServicesPage() {
               Ongoing Support
             </h1>
             <p className="mx-auto mt-6 max-w-md text-pretty text-muted-foreground">
-              Flexible weekly packages designed to fit your workflow. No
-              commitments, cancel anytime.
+              For clients who like to delegate weekly workloads. I offer ongoing collaboration through scoped hour packages, where we have a weekly meeting to align on weekly and monthly goals.
             </p>
           </header>
 
@@ -50,7 +49,7 @@ export default async function ServicesPage() {
           </div>
         </section>
 
-        <section>
+        <section className="hidden">
           <header className="mb-16 text-center">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
               One-Time Services
