@@ -8,6 +8,7 @@ import { ServiceSelect } from "@/components/composed/service-select"
 import type { ServiceOption } from "@/components/composed/service-select"
 import { cn } from "@/utils/cn"
 import { createBooking } from "@/features/booking/actions/create-booking"
+import { TEST_IDS } from "@/test-ids"
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
@@ -72,12 +73,14 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
+  const [eventId, setEventId] = useState<string | null>(null)
 
   async function handleSubmit() {
     if (!selectedDate || !selectedTime) return
     setStatus("loading")
     const result = await createBooking({ name, email, product, year, month, day: selectedDate, time: selectedTime })
     if (result.ok) {
+      setEventId(result.value.eventId)
       setStatus("success")
     } else {
       setStatus("error")
@@ -164,6 +167,7 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
                   }}
                   aria-label={date.muted ? undefined : `${monthName} ${date.day}, ${year}`}
                   aria-pressed={isSelected}
+                  data-testid={isAvailable ? TEST_IDS.booking.calendar.day : undefined}
                   className={cn(calendarDayVariants({ state }))}
                 >
                   {date.day}
@@ -204,6 +208,7 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
                     type="button"
                     onClick={() => setSelectedTime(time)}
                     aria-pressed={selectedTime === time}
+                    data-testid={TEST_IDS.booking.timeSlot}
                     className={cn(
                       "rounded-md border px-4 py-3 text-sm motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                       selectedTime === time
@@ -240,6 +245,7 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
                 placeholder="Your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                data-testid={TEST_IDS.booking.form.name}
               />
             </div>
 
@@ -253,6 +259,7 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                data-testid={TEST_IDS.booking.form.email}
               />
             </div>
 
@@ -265,13 +272,19 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
                 serviceOptions={serviceOptions}
                 value={product}
                 onValueChange={onProductChange}
+                triggerTestId={TEST_IDS.booking.form.product}
+                itemTestId={TEST_IDS.booking.form.productOption}
               />
             </div>
           </div>
 
           <div className="mt-6">
             {status === "success" ? (
-              <div className="rounded-md border border-border bg-muted p-4 text-center">
+              <div
+                className="rounded-md border border-border bg-muted p-4 text-center"
+                data-testid={TEST_IDS.booking.success}
+                data-event-id={eventId ?? ""}
+              >
                 <p className="text-sm font-medium text-foreground">Booking confirmed!</p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {monthName} {selectedDate}, {year} at {selectedTime}
@@ -284,6 +297,7 @@ export function CalendarWithSlots({ serviceOptions, product, onProductChange }: 
                   className="w-full"
                   disabled={status === "loading" || !selectedDate || !selectedTime || !name || !email || !product}
                   onClick={handleSubmit}
+                  data-testid={TEST_IDS.booking.form.submit}
                 >
                   {status === "loading" ? "Booking…" : "Confirm Booking"}
                 </Button>

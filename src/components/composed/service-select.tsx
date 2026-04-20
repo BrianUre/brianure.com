@@ -18,17 +18,27 @@ interface ServiceSelectProps {
   onValueChange: (value: string) => void
   id?: string
   className?: string
+  triggerTestId?: string
+  itemTestId?: string
 }
 
-function ServiceSelect({ serviceOptions, value, onValueChange, id, className }: ServiceSelectProps) {
+function ServiceSelect({
+  serviceOptions,
+  value,
+  onValueChange,
+  id,
+  className,
+  triggerTestId,
+  itemTestId,
+}: ServiceSelectProps) {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger id={id} className={cn('w-full', className)}>
+      <SelectTrigger id={id} className={cn('w-full', className)} data-testid={triggerTestId}>
         <SelectValue placeholder="Select a product" />
       </SelectTrigger>
       <SelectContent>
         {serviceOptions.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
+          <SelectItem key={option.value} value={option.value} data-testid={itemTestId}>
             {option.label}
           </SelectItem>
         ))}
