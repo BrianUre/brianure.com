@@ -1,9 +1,13 @@
 import { PackageCard } from "@/components/composed/package-card";
 import { ServiceCard } from "@/components/composed/service-card";
 import { getServices } from "@/features/services/actions/get-services";
+import { getServicesContent } from "@/features/services/actions/get-services-content";
 
 export default async function ServicesPage() {
-  const result = await getServices();
+  const [result, content] = await Promise.all([
+    getServices(),
+    getServicesContent(),
+  ]);
 
   if (!result.ok) {
     return (
@@ -18,6 +22,7 @@ export default async function ServicesPage() {
   }
 
   const { weeklyPackages } = result.value;
+  const { weeklySection, milestoneSection } = content;
 
   return (
     <main className="min-h-screen px-6 py-24 md:px-12 lg:px-24">
@@ -25,13 +30,13 @@ export default async function ServicesPage() {
         <section className="mb-32">
           <header className="mb-16 text-center">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
-              Weekly Packages
+              {weeklySection.caption}
             </p>
             <h1 className="text-balance text-4xl font-light tracking-tight md:text-5xl">
-              Ongoing Support
+              {weeklySection.title}
             </h1>
             <p className="mx-auto mt-6 max-w-md text-pretty text-muted-foreground">
-              For clients who like to delegate weekly workloads. I offer ongoing collaboration through scoped hour packages, where we have a weekly meeting to align on weekly and monthly goals.
+              {weeklySection.description}
             </p>
           </header>
 
@@ -52,20 +57,20 @@ export default async function ServicesPage() {
         <section className="mb-32">
           <header className="mb-16 text-center">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
-              Milestone based
+              {milestoneSection.caption}
             </p>
             <h2 className="text-balance text-4xl font-light tracking-tight md:text-5xl">
-              Project Planning.
+              {milestoneSection.title}
             </h2>
             <p className="mx-auto mt-6 max-w-md text-pretty text-muted-foreground">
-              For clients who value budget predictability and defined goals.
+              {milestoneSection.description}
             </p>
           </header>
 
           <div className="grid gap-6 lg:grid-cols-3">
             <ServiceCard
-              title="Application Development Plan"
-              description="I will analyze your project after a briefing call and plan its development, delivering a clear set of milestones with deadlines and prices."
+              title={milestoneSection.item.title}
+              description={milestoneSection.item.description}
               actionLabel="Get a quote"
               contactHref="/contact?service=project-planning"
               className="lg:col-span-3"
