@@ -1,19 +1,26 @@
 import { Suspense } from "react"
 import { getServices } from "@/features/services/actions/get-services"
+import { getAvailability } from "@/features/availability/actions/get-availability"
 import { ContactTabs } from "./contact-tabs"
 
 export default async function ContactPage() {
-  const servicesResult = await getServices()
+  const [servicesResult, availabilityResult] = await Promise.all([
+    getServices(),
+    getAvailability(),
+  ])
+
   const serviceOptions = servicesResult.ok
     ? [
         ...servicesResult.value.weeklyPackages.map((p) => ({
           value: p.priceId,
           label: `Weekly ${p.hours} Hours`,
         })),
-{ value: "project-planning", label: "Project planning" },
+        { value: "project-planning", label: "Project planning" },
         { value: "other", label: "Other" },
       ]
     : [{ value: "other", label: "Other" }]
+
+  const availability = availabilityResult.ok ? availabilityResult.value : []
 
   return (
     <main className="min-h-screen bg-background px-2 sm:px-6 pb-24 pt-32">
@@ -26,7 +33,7 @@ export default async function ContactPage() {
         </header>
 
         <Suspense>
-          <ContactTabs serviceOptions={serviceOptions} />
+          <ContactTabs serviceOptions={serviceOptions} availability={availability} />
         </Suspense>
       </div>
     </main>

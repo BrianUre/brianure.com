@@ -23,6 +23,7 @@ async function getAvailability(): Promise<Result<DayAvailability[], Availability
       enabled: row.enabled,
       from: dbTimeToDisplay(row.from_time),
       to: dbTimeToDisplay(row.to_time),
+      zone: row.timezone,
     }))
 
     return ok(availability)

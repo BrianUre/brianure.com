@@ -1,6 +1,5 @@
 import { google } from "googleapis"
 
-export const CALENDAR_TIMEZONE = "America/Chicago"
 export const CALENDAR_ID = "primary"
 
 export function getCalendar() {

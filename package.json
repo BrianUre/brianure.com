@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "gen-types": "supabase gen types typescript --local > src/types/database.types.ts"
@@ -19,6 +21,8 @@
     "@supabase/supabase-js": "^2.101.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "googleapis": "^171.4.0",
     "lucide-react": "^1.7.0",
     "next": "16.2.2",
@@ -44,6 +48,7 @@
     "eslint-config-next": "16.2.2",
     "supabase": "^2.84.7",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.5"
   }
 }

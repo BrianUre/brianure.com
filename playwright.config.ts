@@ -10,5 +10,5 @@ if (!baseURL) {
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  use: { baseURL },
+  use: { baseURL, timezoneId: "America/New_York" },
 })

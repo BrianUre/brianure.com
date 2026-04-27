@@ -4,6 +4,7 @@ const TEST_IDS = {
       day: "booking-calendar-day",
     },
     timeSlot: "booking-time-slot",
+    timeCaption: "booking-time-caption",
     form: {
       name: "booking-form-name",
       email: "booking-form-email",

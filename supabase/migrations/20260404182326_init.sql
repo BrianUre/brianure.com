@@ -24,7 +24,8 @@ create table public.availability_schedule (
   -- 0 = Monday ... 6 = Sunday
   enabled     boolean  not null default true,
   from_time   time     not null default '11:00',
-  to_time     time     not null default '17:00'
+  to_time     time     not null default '17:00',
+  timezone    text     not null default 'America/New_York'
 );
 
 alter table public.availability_schedule enable row level security;
@@ -34,7 +35,13 @@ create policy "availability: public read"
   on public.availability_schedule for select
   using (true);
 
--- Admin-only write
+-- Admin-only insert (needed because saveAvailability uses upsert,
+-- and PostgREST routes upsert through INSERT ... ON CONFLICT).
+create policy "availability: admin insert"
+  on public.availability_schedule for insert
+  with check (exists (select 1 from public.admins where user_id = auth.uid()));
+
+-- Admin-only update
 create policy "availability: admin write"
   on public.availability_schedule for update
   using  (exists (select 1 from public.admins where user_id = auth.uid()))

@@ -1,8 +1,9 @@
 interface DayAvailability {
   dayOfWeek: number
   enabled: boolean
-  from: string // "11:00 AM"
-  to: string   // "5:00 PM"
+  from: string // Display form in the zone below, e.g. "11:00 AM"
+  to: string
+  zone: string // IANA zone the `from`/`to` wall-clock times are expressed in
 }
 
 interface AvailabilityError {

@@ -51,10 +51,12 @@ interface DayRowProps {
   day: string
   schedule: DaySchedule
   timeSlots: string[]
+  timesDisabled?: boolean
   onUpdate: (updates: Partial<DaySchedule>) => void
 }
 
-export function DayRow({ day, schedule, timeSlots, onUpdate }: DayRowProps) {
+export function DayRow({ day, schedule, timeSlots, timesDisabled = false, onUpdate }: DayRowProps) {
+  const timesInputDisabled = !schedule.enabled || timesDisabled
   return (
     <div
       className={cn(
@@ -74,7 +76,7 @@ export function DayRow({ day, schedule, timeSlots, onUpdate }: DayRowProps) {
         <TimeSelect
           value={schedule.from}
           slots={timeSlots}
-          disabled={!schedule.enabled}
+          disabled={timesInputDisabled}
           placeholder="From"
           onChange={(value) => onUpdate({ from: value })}
         />
@@ -82,7 +84,7 @@ export function DayRow({ day, schedule, timeSlots, onUpdate }: DayRowProps) {
         <TimeSelect
           value={schedule.to}
           slots={timeSlots}
-          disabled={!schedule.enabled}
+          disabled={timesInputDisabled}
           placeholder="To"
           onChange={(value) => onUpdate({ to: value })}
         />

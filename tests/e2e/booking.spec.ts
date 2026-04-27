@@ -20,8 +20,15 @@ test.describe("Booking flow", () => {
   test("confirms the booking and shows the success banner", async ({ page }) => {
     await page.goto("/contact")
 
-    await page.getByTestId(TEST_IDS.booking.calendar.day).first().click()
-    await page.getByTestId(TEST_IDS.booking.timeSlot).first().click()
+    const firstDay = page.getByTestId(TEST_IDS.booking.calendar.day).first()
+    await expect(firstDay).toBeVisible({ timeout: 10_000 })
+    await firstDay.click()
+
+    const firstSlot = page.getByTestId(TEST_IDS.booking.timeSlot).first()
+    await expect(firstSlot).toBeVisible()
+    const utcInstant = await firstSlot.getAttribute("data-utc-instant")
+    expect(utcInstant).toBeTruthy()
+    await firstSlot.click()
 
     await page.getByTestId(TEST_IDS.booking.form.name).fill(TEST_ATTENDEE_NAME)
     await page.getByTestId(TEST_IDS.booking.form.email).fill(TEST_ATTENDEE_EMAIL)

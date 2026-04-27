@@ -7,6 +7,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/utils/cn"
 import type { ServiceOption } from "@/components/composed/service-select"
+import type { DayAvailability } from "@/features/availability/types/availability"
 import { CalendarWithSlots } from "./calendar-with-slots"
 import { EmailContactForm } from "./email-contact-form"
 
@@ -14,6 +15,7 @@ type ContactMethod = "meeting" | "email"
 
 interface ContactTabsProps {
   serviceOptions: ServiceOption[]
+  availability: DayAvailability[]
 }
 
 const methodCardVariants = cva(
@@ -54,7 +56,7 @@ const methodDescVariants = cva("text-xs", {
 
 type MethodState = VariantProps<typeof methodCardVariants>["state"]
 
-function ContactTabs({ serviceOptions }: ContactTabsProps) {
+function ContactTabs({ serviceOptions, availability }: ContactTabsProps) {
   const searchParams = useSearchParams()
   const [activeMethod, setActiveMethod] = useState<ContactMethod>("meeting")
   const [product, setProduct] = useState(searchParams.get("service") ?? "")
@@ -107,7 +109,12 @@ function ContactTabs({ serviceOptions }: ContactTabsProps) {
 
       <section className="mt-12">
         {activeMethod === "meeting" ? (
-          <CalendarWithSlots serviceOptions={serviceOptions} product={product} onProductChange={setProduct} />
+          <CalendarWithSlots
+            serviceOptions={serviceOptions}
+            availability={availability}
+            product={product}
+            onProductChange={setProduct}
+          />
         ) : (
           <EmailContactForm serviceOptions={serviceOptions} product={product} onProductChange={setProduct} />
         )}

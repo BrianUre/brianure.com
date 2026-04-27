@@ -12,6 +12,7 @@ const DayAvailabilitySchema = z.object({
   enabled: z.boolean(),
   from: z.string().min(1),
   to: z.string().min(1),
+  zone: z.string().min(1),
 })
 
 const ScheduleSchema = z.array(DayAvailabilitySchema).length(7)
@@ -29,6 +30,7 @@ async function saveAvailability(
     enabled: day.enabled,
     from_time: displayTimeToDb(day.from),
     to_time: displayTimeToDb(day.to),
+    timezone: day.zone,
   }))
 
   try {
@@ -38,6 +40,7 @@ async function saveAvailability(
       .upsert(rows, { onConflict: "day_of_week" })
 
     if (error) {
+      console.error("[saveAvailability] Supabase error:", error)
       return err({ code: "SAVE_FAILED", message: error.message })
     }
 

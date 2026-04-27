@@ -54,18 +54,21 @@ export type Database = {
           day_of_week: number
           enabled: boolean
           from_time: string
+          timezone: string
           to_time: string
         }
         Insert: {
           day_of_week: number
           enabled?: boolean
           from_time?: string
+          timezone?: string
           to_time?: string
         }
         Update: {
           day_of_week?: number
           enabled?: boolean
           from_time?: string
+          timezone?: string
           to_time?: string
         }
         Relationships: []

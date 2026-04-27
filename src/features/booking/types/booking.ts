@@ -2,10 +2,7 @@ interface BookingInput {
   name: string
   email: string
   product: string // priceId or "other"
-  year: number
-  month: number // 0-indexed
-  day: number
-  time: string // "9:00 AM"
+  utcInstant: string // ISO-8601 with Z suffix, start of the meeting
 }
 
 interface BookingConfirmation {
