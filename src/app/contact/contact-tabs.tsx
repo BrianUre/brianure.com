@@ -66,7 +66,7 @@ function ContactTabs({ serviceOptions, availability }: ContactTabsProps) {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-4">
         <button
           type="button"
           onClick={() => setActiveMethod("meeting")}
@@ -93,7 +93,7 @@ function ContactTabs({ serviceOptions, availability }: ContactTabsProps) {
           <p className={cn(methodDescVariants({ state: emailState }), "hidden sm:block")}>Ask me any questions</p>
         </button>
 
-        <a
+        {/* <a
           href={process.env.NEXT_PUBLIC_SLACK_URL}
           target="_blank"
           rel="noopener noreferrer"
@@ -104,7 +104,7 @@ function ContactTabs({ serviceOptions, availability }: ContactTabsProps) {
           </div>
           <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">Slack</h3>
           <p className={cn(methodDescVariants({ state: "inactive" }), "hidden sm:block")}>Join my Slack server and start a chat</p>
-        </a>
+        </a> */}
       </div>
 
       <section className="mt-12">
