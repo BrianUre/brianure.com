@@ -33,9 +33,6 @@ test.describe("Booking flow", () => {
     await page.getByTestId(TEST_IDS.booking.form.name).fill(TEST_ATTENDEE_NAME)
     await page.getByTestId(TEST_IDS.booking.form.email).fill(TEST_ATTENDEE_EMAIL)
 
-    await page.getByTestId(TEST_IDS.booking.form.product).click()
-    await page.getByTestId(TEST_IDS.booking.form.productOption).first().click()
-
     await page.getByTestId(TEST_IDS.booking.form.submit).click()
 
     const successBanner = page.getByTestId(TEST_IDS.booking.success)

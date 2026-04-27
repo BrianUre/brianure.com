@@ -1,7 +1,6 @@
 interface BookingInput {
   name: string
   email: string
-  product: string // priceId or "other"
   utcInstant: string // ISO-8601 with Z suffix, start of the meeting
 }
 

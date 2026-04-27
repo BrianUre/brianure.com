@@ -10,7 +10,6 @@ import type { Result } from "@/types/result"
 const contactEmailSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
-  productLabel: z.string().min(1),
   message: z.string().min(1),
 })
 
@@ -24,13 +23,13 @@ async function sendContactEmail(input: unknown): Promise<Result<void, ContactEma
     return err({ message: "Please fill in all required fields." })
   }
 
-  const { name, email, productLabel, message } = parsed.data
+  const { name, email, message } = parsed.data
 
   const result = await sendEmail({
     from: process.env.RESEND_CONTACT_EMAIL!,
     to: process.env.EMAIL_CONTACT_RECIPIENT!,
-    subject: `New message from ${name} — ${productLabel}`,
-    react: <ContactEmail name={name} email={email} productLabel={productLabel} message={message} />,
+    subject: `New message from ${name}`,
+    react: <ContactEmail name={name} email={email} message={message} />,
     replyTo: email,
   })
 

@@ -12,7 +12,6 @@ const MEETING_DURATION_MS = 30 * 60 * 1000
 const BookingSchema = z.object({
   name: z.string().min(1),
   email: z.email(),
-  product: z.string().min(1),
   utcInstant: z.iso.datetime(),
 })
 
@@ -24,12 +23,11 @@ async function createBooking(
     return err({ code: "VALIDATION_FAILED", message: parsed.error.message })
   }
 
-  const { name, email, product, utcInstant } = parsed.data
+  const { name, email, utcInstant } = parsed.data
   const start = new Date(utcInstant)
   const end = new Date(start.getTime() + MEETING_DURATION_MS)
 
   const summary = `Meeting with ${name}`
-  const description = `Product of interest: ${product}`
 
   try {
     const calendar = getCalendar()
@@ -39,7 +37,6 @@ async function createBooking(
       sendUpdates: "all",
       requestBody: {
         summary,
-        description,
         start: { dateTime: start.toISOString(), timeZone: "UTC" },
         end: { dateTime: end.toISOString(), timeZone: "UTC" },
         attendees: [{ email }],

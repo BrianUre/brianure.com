@@ -15,7 +15,6 @@ import {
 interface ContactEmailProps {
   name: string
   email: string
-  productLabel: string
   message: string
 }
 
@@ -27,7 +26,7 @@ const colors = {
   border: "#383838",
 }
 
-function ContactEmail({ name, email, productLabel, message }: ContactEmailProps) {
+function ContactEmail({ name, email, message }: ContactEmailProps) {
   const logoUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/images/logo-dark.png`
 
   return (
@@ -62,7 +61,6 @@ function ContactEmail({ name, email, productLabel, message }: ContactEmailProps)
 
                 <Field label="Name" value={name} />
                 <Field label="Email" value={email} />
-                <Field label="Product of Interest" value={productLabel} />
                 <Field label="Message" value={message} last />
               </Column>
             </Row>

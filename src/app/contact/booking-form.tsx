@@ -39,7 +39,6 @@ export function BookingForm({
     const result = await createBooking({
       name,
       email,
-      product,
       utcInstant: selectedSlot.utcInstant.toISOString(),
     })
     if (result.ok) {
@@ -95,7 +94,7 @@ export function BookingForm({
           />
         </div>
 
-        <div>
+        <div hidden>
           <label htmlFor="booking-product" className="mb-2 block text-xs font-medium text-muted-foreground">
             Product of Interest
           </label>
@@ -127,7 +126,7 @@ export function BookingForm({
           <>
             <Button
               className="w-full"
-              disabled={status === "loading" || !selectedSlot || !name || !email || !product}
+              disabled={status === "loading" || !selectedSlot || !name || !email}
               onClick={handleSubmit}
               data-testid={TEST_IDS.booking.form.submit}
             >

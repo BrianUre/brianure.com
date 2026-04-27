@@ -24,8 +24,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
 
   async function handleSubmit() {
     setStatus("loading")
-    const productLabel = serviceOptions.find((option) => option.value === product)?.label ?? product
-    const result = await sendContactEmail({ name, email, productLabel, message })
+    const result = await sendContactEmail({ name, email, message })
     if (result.ok) {
       setStatus("success")
     } else {
@@ -80,7 +79,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
           />
         </div>
 
-        <div>
+        <div hidden>
           <label htmlFor="email-form-product" className="mb-2 block text-xs font-medium text-muted-foreground">
             Product of Interest
           </label>
@@ -108,7 +107,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
         <Button
           className="mt-2 w-full"
           variant="solid"
-          disabled={status === "loading" || !name || !email || !product || !message}
+          disabled={status === "loading" || !name || !email || !message}
           onClick={handleSubmit}
         >
           {status === "loading" ? "Sending…" : "Send Message"}
