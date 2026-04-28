@@ -10,5 +10,11 @@ if (!baseURL) {
 
 export default defineConfig({
   testDir: "./tests/e2e",
-  use: { baseURL, timezoneId: "America/New_York" },
+  use: {
+    baseURL,
+    timezoneId: "America/New_York",
+    extraHTTPHeaders: process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+      ? { "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET }
+      : undefined,
+  },
 })
