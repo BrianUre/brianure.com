@@ -68,7 +68,7 @@ function ContactTabs({ serviceOptions, availability, busyIntervals }: ContactTab
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-2 sm:gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <button
           type="button"
           onClick={() => setActiveMethod("meeting")}
@@ -95,18 +95,18 @@ function ContactTabs({ serviceOptions, availability, busyIntervals }: ContactTab
           <p className={cn(methodDescVariants({ state: emailState }), "hidden sm:block")}>Ask me any questions</p>
         </button>
 
-        {/* <a
-          href={process.env.NEXT_PUBLIC_SLACK_URL}
+        <a
+          href={process.env.NEXT_PUBLIC_WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
           className={cn(methodCardVariants({ state: "inactive" }))}
         >
           <div className={cn(methodIconVariants({ state: "inactive" }))}>
-            <Image src="/images/slack.png" alt="Slack" width={20} height={20} className="size-5" />
+            <Image src="/images/whatsapp.png" alt="WhatsApp" width={20} height={20} className="size-6" />
           </div>
-          <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">Slack</h3>
-          <p className={cn(methodDescVariants({ state: "inactive" }), "hidden sm:block")}>Join my Slack server and start a chat</p>
-        </a> */}
+          <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">WhatsApp</h3>
+          <p className={cn(methodDescVariants({ state: "inactive" }), "hidden sm:block")}>Message me directly on WhatsApp</p>
+        </a>
       </div>
 
       <section className="mt-12">
