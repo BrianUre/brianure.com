@@ -6,6 +6,17 @@ import Image from "next/image"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/utils/cn"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import type { ServiceOption } from "@/components/composed/service-select"
 import type { DayAvailability } from "@/features/availability/types/availability"
 import type { BusyInterval } from "@/lib/google-calendar"
@@ -95,18 +106,42 @@ function ContactTabs({ serviceOptions, availability, busyIntervals }: ContactTab
           <p className={cn(methodDescVariants({ state: emailState }), "hidden sm:block")}>Ask me any questions</p>
         </button>
 
-        <a
-          href={process.env.NEXT_PUBLIC_WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(methodCardVariants({ state: "inactive" }))}
-        >
-          <div className={cn(methodIconVariants({ state: "inactive" }))}>
-            <Image src="/images/whatsapp.png" alt="WhatsApp" width={20} height={20} className="size-6" />
-          </div>
-          <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">WhatsApp</h3>
-          <p className={cn(methodDescVariants({ state: "inactive" }), "hidden sm:block")}>Message me directly on WhatsApp</p>
-        </a>
+        <Dialog>
+          <DialogTrigger asChild>
+            <button
+              type="button"
+              className={cn(methodCardVariants({ state: "inactive" }))}
+            >
+              <div className={cn(methodIconVariants({ state: "inactive" }))}>
+                <Image src="/images/whatsapp.png" alt="WhatsApp" width={20} height={20} className="size-6" />
+              </div>
+              <h3 className="sm:mb-1 hidden text-sm font-medium sm:block">WhatsApp</h3>
+              <p className={cn(methodDescVariants({ state: "inactive" }), "hidden sm:block")}>Message me directly on WhatsApp</p>
+            </button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Open WhatsApp?</DialogTitle>
+              <DialogDescription>
+                You&apos;ll be taken to WhatsApp in a new tab to start a chat.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button asChild variant="solid">
+                <a
+                  href={process.env.NEXT_PUBLIC_WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open WhatsApp
+                </a>
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <section className="mt-12">
