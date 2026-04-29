@@ -6,6 +6,7 @@ import Image from "next/image"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/utils/cn"
+import { TEST_IDS } from "@/test-ids"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -97,6 +98,7 @@ function ContactTabs({ serviceOptions, availability, busyIntervals }: ContactTab
           type="button"
           onClick={() => setActiveMethod("email")}
           aria-pressed={activeMethod === "email"}
+          data-testid={TEST_IDS.contact.method.email}
           className={cn(methodCardVariants({ state: emailState }))}
         >
           <div className={cn(methodIconVariants({ state: emailState }))}>

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test"
 import { TEST_IDS } from "@/test-ids"
 import { deleteCalendarEvent, deleteCalendarEventsByAttendee } from "../helpers/calendar-cleanup"
 
-const TEST_ATTENDEE_EMAIL = "playwright@brianure.test"
+const TEST_ATTENDEE_EMAIL = "test@brianure.com"
 const TEST_ATTENDEE_NAME = "Playwright Test"
 
 test.describe("Booking flow", () => {
@@ -24,7 +24,9 @@ test.describe("Booking flow", () => {
     await expect(firstDay).toBeVisible({ timeout: 10_000 })
     await firstDay.click()
 
-    const firstSlot = page.getByTestId(TEST_IDS.booking.timeSlot).first()
+    const firstSlot = page
+      .locator(`[data-testid="${TEST_IDS.booking.timeSlot}"]:not([disabled])`)
+      .first()
     await expect(firstSlot).toBeVisible()
     const utcInstant = await firstSlot.getAttribute("data-utc-instant")
     expect(utcInstant).toBeTruthy()

@@ -14,6 +14,18 @@ const TEST_IDS = {
     },
     success: "booking-success",
   },
+  contact: {
+    method: {
+      email: "contact-method-email",
+    },
+    emailForm: {
+      name: "contact-email-form-name",
+      email: "contact-email-form-email",
+      message: "contact-email-form-message",
+      submit: "contact-email-form-submit",
+      success: "contact-email-form-success",
+    },
+  },
 } as const
 
 export { TEST_IDS }

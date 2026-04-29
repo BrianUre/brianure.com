@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ServiceSelect } from "@/components/composed/service-select"
 import type { ServiceOption } from "@/components/composed/service-select"
 import { sendContactEmail } from "@/features/contact/actions/send-contact-email"
+import { TEST_IDS } from "@/test-ids"
 
 interface EmailContactFormProps {
   serviceOptions: ServiceOption[]
@@ -35,7 +36,10 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
 
   if (status === "success") {
     return (
-      <div className="mx-auto max-w-lg rounded-lg border border-border bg-card p-8 text-center">
+      <div
+        data-testid={TEST_IDS.contact.emailForm.success}
+        className="mx-auto max-w-lg rounded-lg border border-border bg-card p-8 text-center"
+      >
         <p className="text-sm font-medium text-foreground">Message sent!</p>
         <p className="mt-1 text-xs text-muted-foreground">
           Thanks for reaching out. I&apos;ll get back to you soon.
@@ -60,6 +64,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
           </label>
           <Input
             id="email-form-name"
+            data-testid={TEST_IDS.contact.emailForm.name}
             placeholder="Your name"
             value={name}
             onChange={(event) => setName(event.target.value)}
@@ -72,6 +77,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
           </label>
           <Input
             id="email-form-address"
+            data-testid={TEST_IDS.contact.emailForm.email}
             type="email"
             placeholder="you@example.com"
             value={email}
@@ -97,6 +103,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
           </label>
           <Textarea
             id="email-form-message"
+            data-testid={TEST_IDS.contact.emailForm.message}
             placeholder="Tell me about your project..."
             value={message}
             onChange={(event) => setMessage(event.target.value)}
@@ -106,6 +113,7 @@ function EmailContactForm({ serviceOptions, product, onProductChange }: EmailCon
 
         <Button
           className="mt-2 w-full"
+          data-testid={TEST_IDS.contact.emailForm.submit}
           variant="solid"
           disabled={status === "loading" || !name || !email || !message}
           onClick={handleSubmit}
