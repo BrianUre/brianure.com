@@ -2,6 +2,7 @@ interface BookingInput {
   name: string
   email: string
   utcInstant: string // ISO-8601 with Z suffix, start of the meeting
+  visitorZone: string // IANA timezone of the visitor, used for the confirmation email
 }
 
 interface BookingConfirmation {

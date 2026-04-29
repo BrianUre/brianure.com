@@ -40,6 +40,7 @@ export function BookingForm({
       name,
       email,
       utcInstant: selectedSlot.utcInstant.toISOString(),
+      visitorZone,
     })
     if (result.ok) {
       setEventId(result.value.eventId)

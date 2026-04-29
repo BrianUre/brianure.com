@@ -4,6 +4,7 @@ import { z } from "zod"
 
 import { sendEmail } from "@/lib/resend"
 import { ContactEmail } from "../emails/contact-email"
+import { ContactConfirmationEmail } from "../emails/contact-confirmation-email"
 import { err } from "@/types/result"
 import type { Result } from "@/types/result"
 
@@ -35,6 +36,20 @@ async function sendContactEmail(input: unknown): Promise<Result<void, ContactEma
 
   if (!result.ok) {
     return err({ message: "Failed to send your message. Please try again." })
+  }
+
+  const confirmationResult = await sendEmail({
+    from: process.env.RESEND_CONTACT_EMAIL!,
+    to: email,
+    subject: "I got your message",
+    react: <ContactConfirmationEmail name={name} message={message} />,
+  })
+
+  if (!confirmationResult.ok) {
+    console.error(
+      "[sendContactEmail] confirmation send failed:",
+      confirmationResult.error,
+    )
   }
 
   return result
