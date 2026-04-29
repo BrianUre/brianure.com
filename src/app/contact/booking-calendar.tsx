@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useMemo } from "react"
-import { cva } from "class-variance-authority"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/utils/cn"
-import { TEST_IDS } from "@/test-ids"
+import { useEffect, useMemo, useState } from "react";
+import { cva } from "class-variance-authority";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/utils/cn";
+import { TEST_IDS } from "@/test-ids";
 import {
   buildSlotsForDate,
   instantToDateStringInZone,
-} from "@/features/availability/utils/zone"
-import type { WeeklyAvailability } from "@/features/availability/utils/zone"
-import type { BusyInterval } from "@/lib/google-calendar"
+} from "@/features/availability/utils/zone";
+import type { WeeklyAvailability } from "@/features/availability/utils/zone";
+import type { BusyInterval } from "@/lib/google-calendar";
 
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-const SLOT_INTERVAL_MINUTES = 30
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const SLOT_INTERVAL_MINUTES = 30;
 
 const calendarDayVariants = cva(
   "aspect-square rounded-md sm:p-2 text-sm motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
@@ -27,54 +27,64 @@ const calendarDayVariants = cva(
       },
     },
   },
-)
+);
 
 interface CalendarCell {
-  year: number
-  month: number
-  day: number
-  inCurrentMonth: boolean
+  year: number;
+  month: number;
+  day: number;
+  inCurrentMonth: boolean;
 }
 
 function getCalendarCells(year: number, month: number): CalendarCell[] {
-  const firstDayOfWeek = new Date(year, month, 1).getDay()
-  const daysInMonth = new Date(year, month + 1, 0).getDate()
-  const daysInPrevMonth = new Date(year, month, 0).getDate()
-  const totalCells = Math.ceil((firstDayOfWeek + daysInMonth) / 7) * 7
-  const cells: CalendarCell[] = []
+  const firstDayOfWeek = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+  const totalCells = Math.ceil((firstDayOfWeek + daysInMonth) / 7) * 7;
+  const cells: CalendarCell[] = [];
   for (let i = 0; i < totalCells; i++) {
     if (i < firstDayOfWeek) {
-      const day = daysInPrevMonth - firstDayOfWeek + 1 + i
-      const prev = new Date(year, month - 1, day)
-      cells.push({ year: prev.getFullYear(), month: prev.getMonth(), day, inCurrentMonth: false })
-      continue
+      const day = daysInPrevMonth - firstDayOfWeek + 1 + i;
+      const prev = new Date(year, month - 1, day);
+      cells.push({
+        year: prev.getFullYear(),
+        month: prev.getMonth(),
+        day,
+        inCurrentMonth: false,
+      });
+      continue;
     }
-    const offset = i - firstDayOfWeek + 1
+    const offset = i - firstDayOfWeek + 1;
     if (offset > daysInMonth) {
-      const day = offset - daysInMonth
-      const next = new Date(year, month + 1, day)
-      cells.push({ year: next.getFullYear(), month: next.getMonth(), day, inCurrentMonth: false })
-      continue
+      const day = offset - daysInMonth;
+      const next = new Date(year, month + 1, day);
+      cells.push({
+        year: next.getFullYear(),
+        month: next.getMonth(),
+        day,
+        inCurrentMonth: false,
+      });
+      continue;
     }
-    cells.push({ year, month, day: offset, inCurrentMonth: true })
+    cells.push({ year, month, day: offset, inCurrentMonth: true });
   }
-  return cells
+  return cells;
 }
 
 function dateString(year: number, month: number, day: number): string {
-  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`
+  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
 interface BookingCalendarProps {
-  weeklyAvailability: WeeklyAvailability[]
-  storedZone: string
-  visitorZone: string
-  busyIntervals: BusyInterval[]
-  year: number
-  month: number
-  onChangeMonth: (year: number, month: number) => void
-  selectedDateString: string | null
-  onSelectDate: (dateString: string) => void
+  weeklyAvailability: WeeklyAvailability[];
+  storedZone: string;
+  visitorZone: string;
+  busyIntervals: BusyInterval[];
+  year: number;
+  month: number;
+  onChangeMonth: (year: number, month: number) => void;
+  selectedDateString: string | null;
+  onSelectDate: (dateString: string) => void;
 }
 
 export function BookingCalendar({
@@ -88,19 +98,26 @@ export function BookingCalendar({
   selectedDateString,
   onSelectDate,
 }: BookingCalendarProps) {
-  const cells = useMemo(() => getCalendarCells(year, month), [year, month])
+  const cells = useMemo(() => getCalendarCells(year, month), [year, month]);
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(interval);
+  }, []);
+
   const todayString = useMemo(
-    () => instantToDateStringInZone(new Date(), visitorZone),
-    [visitorZone],
-  )
+    () => instantToDateStringInZone(now, visitorZone),
+    [now, visitorZone],
+  );
 
   const availabilityByDate = useMemo(() => {
-    const map = new Map<string, boolean>()
+    const map = new Map<string, boolean>();
     for (const cell of cells) {
-      const ds = dateString(cell.year, cell.month, cell.day)
+      const ds = dateString(cell.year, cell.month, cell.day);
       if (ds < todayString) {
-        map.set(ds, false)
-        continue
+        map.set(ds, false);
+        continue;
       }
       const slots = buildSlotsForDate({
         weeklyAvailability,
@@ -109,53 +126,104 @@ export function BookingCalendar({
         visitorZone,
         intervalMinutes: SLOT_INTERVAL_MINUTES,
         busy: busyIntervals,
-      })
-      map.set(ds, slots.some((slot) => !slot.busy))
+        now,
+      });
+      map.set(
+        ds,
+        slots.some((slot) => !slot.busy && !slot.past),
+      );
     }
-    return map
-  }, [cells, todayString, weeklyAvailability, storedZone, visitorZone, busyIntervals])
+    return map;
+  }, [
+    cells,
+    todayString,
+    weeklyAvailability,
+    storedZone,
+    visitorZone,
+    busyIntervals,
+    now,
+  ]);
 
   const monthLabel = new Date(year, month).toLocaleDateString("en-US", {
     month: "long",
     year: "numeric",
-  })
-  const monthName = new Date(year, month).toLocaleDateString("en-US", { month: "long" })
+  });
+  const monthName = new Date(year, month).toLocaleDateString("en-US", {
+    month: "long",
+  });
 
   function goToPrevMonth() {
     if (month === 0) {
-      onChangeMonth(year - 1, 11)
-      return
+      onChangeMonth(year - 1, 11);
+      return;
     }
-    onChangeMonth(year, month - 1)
+    onChangeMonth(year, month - 1);
   }
 
   function goToNextMonth() {
     if (month === 11) {
-      onChangeMonth(year + 1, 0)
-      return
+      onChangeMonth(year + 1, 0);
+      return;
     }
-    onChangeMonth(year, month + 1)
+    onChangeMonth(year, month + 1);
   }
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <Button type="button" size="icon" variant="ghost" aria-label="Previous month" onClick={goToPrevMonth}>
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        <Button
+          type="button"
+          size="icon"
+          variant="ghost"
+          aria-label="Previous month"
+          onClick={goToPrevMonth}
+        >
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </Button>
-        <span className="text-sm font-medium text-foreground">{monthLabel}</span>
-        <Button type="button" size="icon" variant="ghost" aria-label="Next month" onClick={goToNextMonth}>
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        <span className="text-sm font-medium text-foreground">
+          {monthLabel}
+        </span>
+        <Button
+          type="button"
+          size="icon"
+          variant="ghost"
+          aria-label="Next month"
+          onClick={goToNextMonth}
+        >
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </Button>
       </div>
 
       <div className="mb-2 grid grid-cols-7 gap-1">
         {DAYS.map((day) => (
-          <div key={day} className="py-2 text-center text-xs font-medium text-muted-foreground">
+          <div
+            key={day}
+            className="py-2 text-center text-xs font-medium text-muted-foreground"
+          >
             {day}
           </div>
         ))}
@@ -163,30 +231,37 @@ export function BookingCalendar({
 
       <div className="grid grid-cols-7 gap-1">
         {cells.map((cell, i) => {
-          const ds = dateString(cell.year, cell.month, cell.day)
-          const isAvailable = cell.inCurrentMonth && (availabilityByDate.get(ds) ?? false)
-          const isSelected = selectedDateString === ds && cell.inCurrentMonth
+          const ds = dateString(cell.year, cell.month, cell.day);
+          const isAvailable =
+            cell.inCurrentMonth && (availabilityByDate.get(ds) ?? false);
+          const isSelected = selectedDateString === ds && cell.inCurrentMonth;
           const state = !cell.inCurrentMonth
             ? "muted"
             : isSelected
               ? "selected"
               : isAvailable
                 ? "available"
-                : "unavailable"
+                : "unavailable";
           return (
             <button
               key={i}
               type="button"
               disabled={!isAvailable}
               onClick={() => onSelectDate(ds)}
-              aria-label={cell.inCurrentMonth ? `${monthName} ${cell.day}, ${cell.year}` : undefined}
+              aria-label={
+                cell.inCurrentMonth
+                  ? `${monthName} ${cell.day}, ${cell.year}`
+                  : undefined
+              }
               aria-pressed={isSelected}
-              data-testid={isAvailable ? TEST_IDS.booking.calendar.day : undefined}
+              data-testid={
+                isAvailable ? TEST_IDS.booking.calendar.day : undefined
+              }
               className={cn(calendarDayVariants({ state }))}
             >
               {cell.day}
             </button>
-          )
+          );
         })}
       </div>
 
@@ -201,5 +276,5 @@ export function BookingCalendar({
         </div>
       </div>
     </div>
-  )
+  );
 }

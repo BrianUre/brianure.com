@@ -1,26 +1,29 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useState } from "react"
-import { cn } from "@/utils/cn"
-import { TEST_IDS } from "@/test-ids"
+import { useEffect, useMemo, useState } from "react";
+import { cn } from "@/utils/cn";
+import { TEST_IDS } from "@/test-ids";
 import {
   buildSlotsForDate,
   instantToWallClockInZone,
   instantToZoneAbbreviation,
-} from "@/features/availability/utils/zone"
-import type { Slot, WeeklyAvailability } from "@/features/availability/utils/zone"
-import type { BusyInterval } from "@/lib/google-calendar"
+} from "@/features/availability/utils/zone";
+import type {
+  Slot,
+  WeeklyAvailability,
+} from "@/features/availability/utils/zone";
+import type { BusyInterval } from "@/lib/google-calendar";
 
-const SLOT_INTERVAL_MINUTES = 30
+const SLOT_INTERVAL_MINUTES = 30;
 
 interface TimeSlotPickerProps {
-  weeklyAvailability: WeeklyAvailability[]
-  storedZone: string
-  visitorZone: string
-  busyIntervals: BusyInterval[]
-  selectedDateString: string | null
-  selectedSlot: Slot | null
-  onSelectSlot: (slot: Slot) => void
+  weeklyAvailability: WeeklyAvailability[];
+  storedZone: string;
+  visitorZone: string;
+  busyIntervals: BusyInterval[];
+  selectedDateString: string | null;
+  selectedSlot: Slot | null;
+  onSelectSlot: (slot: Slot) => void;
 }
 
 export function TimeSlotPicker({
@@ -32,16 +35,16 @@ export function TimeSlotPicker({
   selectedSlot,
   onSelectSlot,
 }: TimeSlotPickerProps) {
-  const [now, setNow] = useState(() => new Date())
+  const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 60_000)
-    return () => clearInterval(interval)
-  }, [])
+    const interval = setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(interval);
+  }, []);
 
   const slots = useMemo(() => {
     if (!selectedDateString) {
-      return []
+      return [];
     }
     return buildSlotsForDate({
       weeklyAvailability,
@@ -50,11 +53,19 @@ export function TimeSlotPicker({
       visitorZone,
       intervalMinutes: SLOT_INTERVAL_MINUTES,
       busy: busyIntervals,
-    })
-  }, [selectedDateString, weeklyAvailability, storedZone, visitorZone, busyIntervals])
+      now,
+    });
+  }, [
+    selectedDateString,
+    weeklyAvailability,
+    storedZone,
+    visitorZone,
+    busyIntervals,
+    now,
+  ]);
 
-  const nowLabel = instantToWallClockInZone(now, visitorZone)
-  const zoneAbbr = instantToZoneAbbreviation(now, visitorZone)
+  const nowLabel = instantToWallClockInZone(now, visitorZone);
+  const zoneAbbr = instantToZoneAbbreviation(now, visitorZone);
   const headingDate = selectedDateString
     ? new Date(`${selectedDateString}T12:00:00Z`).toLocaleDateString("en-US", {
         month: "long",
@@ -62,7 +73,7 @@ export function TimeSlotPicker({
         year: "numeric",
         timeZone: "UTC",
       })
-    : null
+    : null;
 
   return (
     <div className="flex flex-col">
@@ -71,7 +82,9 @@ export function TimeSlotPicker({
           {headingDate ?? "Select a date"}
         </h3>
         <p className="mt-1 text-xs text-muted-foreground">
-          {headingDate ? "Choose an available time slot" : "Pick a day to see available times"}
+          {headingDate
+            ? "Choose an available time slot"
+            : "Pick a day to see available times"}
         </p>
         <p
           className="mt-2 text-xs text-muted-foreground"
@@ -86,21 +99,25 @@ export function TimeSlotPicker({
           slots.length > 0 ? (
             <div className="grid gap-2">
               {slots.map((slot) => {
-                const isSelected = selectedSlot?.utcInstant.getTime() === slot.utcInstant.getTime()
+                const isSelected =
+                  selectedSlot?.utcInstant.getTime() ===
+                  slot.utcInstant.getTime();
+                const isDisabled = slot.busy || slot.past;
                 return (
                   <button
                     key={slot.utcInstant.toISOString()}
                     type="button"
                     onClick={() => onSelectSlot(slot)}
                     aria-pressed={isSelected}
-                    aria-disabled={slot.busy}
-                    disabled={slot.busy}
+                    aria-disabled={isDisabled}
+                    disabled={isDisabled}
                     data-testid={TEST_IDS.booking.timeSlot}
                     data-utc-instant={slot.utcInstant.toISOString()}
                     data-busy={slot.busy ? "true" : undefined}
+                    data-past={slot.past ? "true" : undefined}
                     className={cn(
                       "rounded-md border px-4 py-3 text-sm motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-                      slot.busy
+                      isDisabled
                         ? "cursor-not-allowed border-dashed border-border text-muted-foreground/60 line-through"
                         : isSelected
                           ? "border-foreground bg-foreground text-background"
@@ -110,20 +127,24 @@ export function TimeSlotPicker({
                     {slot.localLabel}
                     {slot.busy && <span className="ml-2 text-xs">(taken)</span>}
                   </button>
-                )
+                );
               })}
             </div>
           ) : (
             <div className="flex h-full items-center justify-center rounded-md border border-dashed border-border">
-              <p className="text-sm text-muted-foreground">No slots available on this day</p>
+              <p className="text-sm text-muted-foreground">
+                No slots available on this day
+              </p>
             </div>
           )
         ) : (
           <div className="flex h-full items-center justify-center rounded-md border border-dashed border-border">
-            <p className="text-sm text-muted-foreground">Select a date to view time slots</p>
+            <p className="text-sm text-muted-foreground">
+              Select a date to view time slots
+            </p>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
