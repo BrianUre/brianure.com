@@ -10,7 +10,7 @@ interface BookingConfirmation {
   summary: string
 }
 
-type BookingErrorCode = "VALIDATION_FAILED" | "CALENDAR_ERROR"
+type BookingErrorCode = "VALIDATION_FAILED" | "CALENDAR_ERROR" | "SLOT_UNAVAILABLE"
 
 interface BookingError {
   code: BookingErrorCode

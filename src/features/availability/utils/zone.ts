@@ -1,4 +1,6 @@
 import { formatInTimeZone, fromZonedTime } from "date-fns-tz"
+import { overlapsBusy } from "./busy"
+import type { BusyInterval } from "@/lib/google-calendar"
 
 function getBrowserZone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -53,6 +55,7 @@ function minutesToTimeString(totalMinutes: number): string {
 interface Slot {
   utcInstant: Date
   localLabel: string
+  busy: boolean
 }
 
 interface WeeklyAvailability {
@@ -68,6 +71,7 @@ interface BuildSlotsOptions {
   visitorDateString: string
   visitorZone: string
   intervalMinutes: number
+  busy?: BusyInterval[]
 }
 
 function buildSlotsForDate({
@@ -76,6 +80,7 @@ function buildSlotsForDate({
   visitorDateString,
   visitorZone,
   intervalMinutes,
+  busy,
 }: BuildSlotsOptions): Slot[] {
   const visitorDayStart = fromZonedTime(`${visitorDateString}T00:00:00`, visitorZone)
   const baseStoredDate = instantToDateStringInZone(visitorDayStart, storedZone)
@@ -96,9 +101,12 @@ function buildSlotsForDate({
       if (instantToDateStringInZone(instant, visitorZone) !== visitorDateString) {
         continue
       }
+      const slotEnd = new Date(instant.getTime() + intervalMinutes * 60_000)
+      const isBusy = busy ? overlapsBusy(instant, slotEnd, busy) : false
       slots.push({
         utcInstant: instant,
         localLabel: instantToWallClockInZone(instant, visitorZone),
+        busy: isBusy,
       })
     }
   }

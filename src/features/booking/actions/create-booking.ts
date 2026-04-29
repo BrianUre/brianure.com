@@ -2,7 +2,7 @@
 
 import { z } from "zod"
 import { randomUUID } from "crypto"
-import { getCalendar, CALENDAR_ID } from "@/lib/google-calendar"
+import { getCalendar, CALENDAR_ID, getBusyIntervals } from "@/lib/google-calendar"
 import { ok, err } from "@/types/result"
 import type { Result } from "@/types/result"
 import type { BookingInput, BookingConfirmation, BookingError } from "../types/booking"
@@ -28,6 +28,14 @@ async function createBooking(
   const end = new Date(start.getTime() + MEETING_DURATION_MS)
 
   const summary = `Meeting with ${name}`
+
+  const busyResult = await getBusyIntervals(start.toISOString(), end.toISOString())
+  if (busyResult.ok && busyResult.value.length > 0) {
+    return err({
+      code: "SLOT_UNAVAILABLE",
+      message: "That slot is no longer available",
+    })
+  }
 
   try {
     const calendar = getCalendar()

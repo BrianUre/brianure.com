@@ -3,6 +3,7 @@
 import { useMemo, useState, useSyncExternalStore } from "react"
 import type { ServiceOption } from "@/components/composed/service-select"
 import type { DayAvailability } from "@/features/availability/types/availability"
+import type { BusyInterval } from "@/lib/google-calendar"
 import {
   getBrowserZone,
   instantToDateStringInZone,
@@ -28,6 +29,7 @@ function useVisitorZone(): string | null {
 interface CalendarWithSlotsProps {
   serviceOptions: ServiceOption[]
   availability: DayAvailability[]
+  busyIntervals: BusyInterval[]
   product: string
   onProductChange: (value: string) => void
 }
@@ -35,6 +37,7 @@ interface CalendarWithSlotsProps {
 export function CalendarWithSlots({
   serviceOptions,
   availability,
+  busyIntervals,
   product,
   onProductChange,
 }: CalendarWithSlotsProps) {
@@ -54,6 +57,7 @@ export function CalendarWithSlots({
     <BookingWidget
       serviceOptions={serviceOptions}
       availability={availability}
+      busyIntervals={busyIntervals}
       product={product}
       onProductChange={onProductChange}
       visitorZone={visitorZone}
@@ -68,6 +72,7 @@ interface BookingWidgetProps extends CalendarWithSlotsProps {
 function BookingWidget({
   serviceOptions,
   availability,
+  busyIntervals,
   product,
   onProductChange,
   visitorZone,
@@ -115,6 +120,7 @@ function BookingWidget({
           weeklyAvailability={weeklyAvailability}
           storedZone={storedZone}
           visitorZone={visitorZone}
+          busyIntervals={busyIntervals}
           year={year}
           month={month}
           onChangeMonth={handleChangeMonth}
@@ -125,6 +131,7 @@ function BookingWidget({
           weeklyAvailability={weeklyAvailability}
           storedZone={storedZone}
           visitorZone={visitorZone}
+          busyIntervals={busyIntervals}
           selectedDateString={selectedDateString}
           selectedSlot={selectedSlot}
           onSelectSlot={setSelectedSlot}

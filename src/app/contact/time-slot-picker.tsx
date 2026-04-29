@@ -9,6 +9,7 @@ import {
   instantToZoneAbbreviation,
 } from "@/features/availability/utils/zone"
 import type { Slot, WeeklyAvailability } from "@/features/availability/utils/zone"
+import type { BusyInterval } from "@/lib/google-calendar"
 
 const SLOT_INTERVAL_MINUTES = 30
 
@@ -16,6 +17,7 @@ interface TimeSlotPickerProps {
   weeklyAvailability: WeeklyAvailability[]
   storedZone: string
   visitorZone: string
+  busyIntervals: BusyInterval[]
   selectedDateString: string | null
   selectedSlot: Slot | null
   onSelectSlot: (slot: Slot) => void
@@ -25,6 +27,7 @@ export function TimeSlotPicker({
   weeklyAvailability,
   storedZone,
   visitorZone,
+  busyIntervals,
   selectedDateString,
   selectedSlot,
   onSelectSlot,
@@ -46,8 +49,9 @@ export function TimeSlotPicker({
       visitorDateString: selectedDateString,
       visitorZone,
       intervalMinutes: SLOT_INTERVAL_MINUTES,
+      busy: busyIntervals,
     })
-  }, [selectedDateString, weeklyAvailability, storedZone, visitorZone])
+  }, [selectedDateString, weeklyAvailability, storedZone, visitorZone, busyIntervals])
 
   const nowLabel = instantToWallClockInZone(now, visitorZone)
   const zoneAbbr = instantToZoneAbbreviation(now, visitorZone)
@@ -89,16 +93,22 @@ export function TimeSlotPicker({
                     type="button"
                     onClick={() => onSelectSlot(slot)}
                     aria-pressed={isSelected}
+                    aria-disabled={slot.busy}
+                    disabled={slot.busy}
                     data-testid={TEST_IDS.booking.timeSlot}
                     data-utc-instant={slot.utcInstant.toISOString()}
+                    data-busy={slot.busy ? "true" : undefined}
                     className={cn(
                       "rounded-md border px-4 py-3 text-sm motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-                      isSelected
-                        ? "border-foreground bg-foreground text-background"
-                        : "border-border text-foreground hover:border-foreground",
+                      slot.busy
+                        ? "cursor-not-allowed border-dashed border-border text-muted-foreground/60 line-through"
+                        : isSelected
+                          ? "border-foreground bg-foreground text-background"
+                          : "border-border text-foreground hover:border-foreground",
                     )}
                   >
                     {slot.localLabel}
+                    {slot.busy && <span className="ml-2 text-xs">(taken)</span>}
                   </button>
                 )
               })}

@@ -10,6 +10,7 @@ import {
   instantToDateStringInZone,
 } from "@/features/availability/utils/zone"
 import type { WeeklyAvailability } from "@/features/availability/utils/zone"
+import type { BusyInterval } from "@/lib/google-calendar"
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const SLOT_INTERVAL_MINUTES = 30
@@ -68,6 +69,7 @@ interface BookingCalendarProps {
   weeklyAvailability: WeeklyAvailability[]
   storedZone: string
   visitorZone: string
+  busyIntervals: BusyInterval[]
   year: number
   month: number
   onChangeMonth: (year: number, month: number) => void
@@ -79,6 +81,7 @@ export function BookingCalendar({
   weeklyAvailability,
   storedZone,
   visitorZone,
+  busyIntervals,
   year,
   month,
   onChangeMonth,
@@ -105,11 +108,12 @@ export function BookingCalendar({
         visitorDateString: ds,
         visitorZone,
         intervalMinutes: SLOT_INTERVAL_MINUTES,
+        busy: busyIntervals,
       })
-      map.set(ds, slots.length > 0)
+      map.set(ds, slots.some((slot) => !slot.busy))
     }
     return map
-  }, [cells, todayString, weeklyAvailability, storedZone, visitorZone])
+  }, [cells, todayString, weeklyAvailability, storedZone, visitorZone, busyIntervals])
 
   const monthLabel = new Date(year, month).toLocaleDateString("en-US", {
     month: "long",
