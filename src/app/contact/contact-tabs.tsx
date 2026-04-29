@@ -144,7 +144,7 @@ function ContactTabs({ serviceOptions, availability, busyIntervals }: ContactTab
         </Dialog>
       </div>
 
-      <section className="mt-12">
+      <section className="mt-6 sm:mt-12">
         {activeMethod === "meeting" ? (
           <CalendarWithSlots
             serviceOptions={serviceOptions}

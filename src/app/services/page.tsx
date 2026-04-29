@@ -25,17 +25,17 @@ export default async function ServicesPage() {
   const { weeklySection, milestoneSection } = content;
 
   return (
-    <main className="min-h-screen px-6 py-24 md:px-12 lg:px-24">
+    <main className="min-h-screen px-6 py-12 sm:py-24 md:px-12 lg:px-24">
       <div className="mx-auto max-w-6xl">
         <section className="mb-32">
-          <header className="mb-16 text-center">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
+          <header className="flex flex-col gap-1 sm:gap-4 mb-4 sm:mb-16 text-center">
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
               {weeklySection.caption}
             </p>
-            <h1 className="text-balance text-4xl font-light tracking-tight md:text-5xl">
+            <h1 className="text-balance text-base font-light tracking-tight sm:text-4xl md:text-5xl">
               {weeklySection.title}
             </h1>
-            <p className="mx-auto mt-6 max-w-md text-pretty text-muted-foreground">
+            <p className="mx-auto max-w-md text-pretty text-xs sm:text-base text-muted-foreground">
               {weeklySection.description}
             </p>
           </header>
@@ -55,14 +55,14 @@ export default async function ServicesPage() {
         </section>
 
         <section className="mb-32">
-          <header className="mb-16 text-center">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
+          <header className="flex flex-col gap-1 sm:gap-4 mb-4 sm:mb-16 text-center">
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
               {milestoneSection.caption}
             </p>
-            <h2 className="text-balance text-4xl font-light tracking-tight md:text-5xl">
+            <h2 className="text-balance text-base font-light tracking-tight sm:text-4xl md:text-5xl">
               {milestoneSection.title}
             </h2>
-            <p className="mx-auto mt-6 max-w-md text-pretty text-muted-foreground">
+            <p className="mx-auto max-w-md text-pretty text-xs sm:text-base text-muted-foreground">
               {milestoneSection.description}
             </p>
           </header>

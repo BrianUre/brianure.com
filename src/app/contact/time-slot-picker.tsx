@@ -138,7 +138,7 @@ export function TimeSlotPicker({
             </div>
           )
         ) : (
-          <div className="flex h-full items-center justify-center rounded-md border border-dashed border-border">
+          <div className="flex h-full items-center justify-center rounded-md border border-dashed border-border py-6 sm:py-0">
             <p className="text-sm text-muted-foreground">
               Select a date to view time slots
             </p>

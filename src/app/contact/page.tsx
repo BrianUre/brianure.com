@@ -31,13 +31,13 @@ export default async function ContactPage() {
   const busyIntervals = busyResult.ok ? busyResult.value : []
 
   return (
-    <main className="min-h-screen bg-background px-2 sm:px-6 pb-24 pt-32">
+    <main className="min-h-screen bg-background px-2 sm:px-6 pb-24 pt-12 sm:pt-32">
       <div className="mx-auto max-w-4xl">
-        <header className="mb-16 text-center">
-          <h1 className="text-balance text-4xl font-light tracking-tight text-foreground md:text-5xl">
+        <header className="flex flex-col gap-1 sm:gap-4 mb-4 sm:mb-16 text-center">
+          <h1 className="text-balance text-base font-light tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Get in Touch
           </h1>
-          <p className="mt-4 text-muted-foreground">Choose how you&apos;d like to connect</p>
+          <p className="text-xs sm:text-base text-muted-foreground">Choose how you&apos;d like to connect</p>
         </header>
 
         <Suspense>
