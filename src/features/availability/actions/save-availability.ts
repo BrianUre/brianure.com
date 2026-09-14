@@ -1,5 +1,6 @@
 "use server"
 
+import * as Sentry from "@sentry/nextjs"
 import { z } from "zod"
 import { createClient } from "@/lib/supabase/server"
 import { ok, err } from "@/types/result"
@@ -41,11 +42,13 @@ async function saveAvailability(
 
     if (error) {
       console.error("[saveAvailability] Supabase error:", error)
+      Sentry.captureException(error, { tags: { scope: "saveAvailability" } })
       return err({ code: "SAVE_FAILED", message: error.message })
     }
 
     return ok(undefined)
   } catch (e) {
+    Sentry.captureException(e, { tags: { scope: "saveAvailability" } })
     return err({
       code: "SAVE_FAILED",
       message: e instanceof Error ? e.message : "Failed to save availability",

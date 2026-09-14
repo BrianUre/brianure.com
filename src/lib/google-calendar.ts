@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs"
 import { google } from "googleapis"
 import { z } from "zod"
 import { ok, err } from "@/types/result"
@@ -76,6 +77,7 @@ export async function getBusyIntervals(
     return ok(busyIntervals)
   } catch (error) {
     console.error("[getBusyIntervals] Failed to query freebusy:", error)
+    Sentry.captureException(error, { tags: { scope: "getBusyIntervals" } })
     return err({
       code: "FETCH_FAILED",
       message: error instanceof Error ? error.message : "Failed to query freebusy",

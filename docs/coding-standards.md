@@ -449,6 +449,12 @@ SUPABASE_SERVICE_ROLE_KEY=        # Server-only — bypasses RLS
 STRIPE_SECRET_KEY=                # Server-only
 STRIPE_WEBHOOK_SECRET=            # Edge Function only
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY= # Safe for browser
+
+# Sentry
+NEXT_PUBLIC_SENTRY_DSN=           # Safe for browser; the SDK is disabled when unset
+SENTRY_ORG=                       # Build-time only — source map upload
+SENTRY_PROJECT=                   # Build-time only — source map upload
+SENTRY_AUTH_TOKEN=                # Build-time only — source map upload, never commit
 ```
 
 ### Rules

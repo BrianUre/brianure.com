@@ -1,5 +1,6 @@
 "use server";
 
+import * as Sentry from "@sentry/nextjs";
 import { stripe } from "@/lib/stripe";
 import { ok, err } from "@/types/result";
 import type { Result } from "@/types/result";
@@ -95,6 +96,7 @@ async function getServices(): Promise<Result<ServicesData, ServicesError>> {
     return ok({ weeklyPackages, oneTimeServices });
   } catch (e) {
     console.error("[getServices] Stripe fetch failed:", e);
+    Sentry.captureException(e, { tags: { scope: "getServices" } });
     return err({
       code: "STRIPE_FETCH_FAILED",
       message:

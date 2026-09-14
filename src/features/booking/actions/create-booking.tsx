@@ -1,5 +1,6 @@
 "use server"
 
+import * as Sentry from "@sentry/nextjs"
 import { z } from "zod"
 import { randomUUID } from "crypto"
 import { formatInTimeZone } from "date-fns-tz"
@@ -150,6 +151,7 @@ async function createBooking(
     })
   } catch (e) {
     console.error("[createBooking] Failed to create calendar event:", e)
+    Sentry.captureException(e, { tags: { scope: "createBooking" } })
     return err({
       code: "CALENDAR_ERROR",
       message: e instanceof Error ? e.message : "Failed to create calendar event",

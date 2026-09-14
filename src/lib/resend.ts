@@ -1,6 +1,7 @@
 import "server-only"
 
 import type React from "react"
+import * as Sentry from "@sentry/nextjs"
 import { Resend } from "resend"
 import { z } from "zod"
 
@@ -57,12 +58,17 @@ async function sendEmail(
 
     if (error) {
       console.error("[sendEmail] Resend error:", error)
+      // Resend returns a plain object rather than an Error, so wrap it to give Sentry a stack trace to group on.
+      Sentry.captureException(new Error(error.message), {
+        tags: { scope: "sendEmail", resendErrorName: error.name },
+      })
       return err({ code: "RESEND_SEND_FAILED", message: error.message })
     }
 
     return ok(undefined)
   } catch (e) {
     console.error("[sendEmail] Resend error:", e)
+    Sentry.captureException(e, { tags: { scope: "sendEmail" } })
     return err({
       code: "RESEND_SEND_FAILED",
       message: e instanceof Error ? e.message : "Failed to send email",
